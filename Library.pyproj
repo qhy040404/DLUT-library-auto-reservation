@@ -24,18 +24,33 @@
   <ItemGroup>
     <Folder Include="driver\" />
     <Folder Include="logo\" />
+    <Folder Include="setup\" />
+    <Folder Include="setup\images\" />
+    <Folder Include="setup\output\" />
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
     <Content Include="driver\chromedriver.exe" />
+    <Content Include="LICENSE" />
     <Content Include="logo\ha1bg.jpg" />
     <Content Include="logo\logo.ico" />
     <Content Include="logo\logo.png" />
     <Content Include="logo\logo.psd" />
     <Content Include="logo\logo.svg" />
     <Content Include="README.md" />
+    <Content Include="setup\auto.iss" />
+    <Content Include="setup\images\100.bmp" />
+    <Content Include="setup\images\100small.bmp" />
+    <Content Include="setup\images\125.bmp" />
+    <Content Include="setup\images\125small.bmp" />
+    <Content Include="setup\images\150.bmp" />
+    <Content Include="setup\images\150small.bmp" />
+    <Content Include="setup\images\175.bmp" />
+    <Content Include="setup\images\175small.bmp" />
+    <Content Include="setup\images\bmp.psd" />
+    <Content Include="setup\input.iss" />
     <Content Include="src\Chart.xlsx" />
     <Content Include="src\config.txt" />
     <Content Include="src\seats.txt" />

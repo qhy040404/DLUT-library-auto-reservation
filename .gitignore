@@ -7,6 +7,7 @@
 test.py
 my.py
 exe/
+output/
 
 # User-specific files
 *.rsuser
