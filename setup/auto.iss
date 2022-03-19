@@ -39,6 +39,7 @@ Source: "J:\VSProjs\Library\exe\auto\dist\main_auto\*"; DestDir: "{app}"; Flags:
 Source: "J:\VSProjs\Library\src\Chart.xlsx"; DestDir: "{app}"; Flags: ignoreversion
 Source: "J:\VSProjs\Library\src\config.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "J:\VSProjs\Library\src\seats.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "J:\VSProjs\Library\driver\chromedriver.exe"; DestDir: "{app}/driver"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
