@@ -1,6 +1,6 @@
 # 大连理工大学图书馆自动预约座位小程序
 
-Forked from [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
+框架来自于[ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
 
 ## 特性
 - 如果预约成功，程序会弹窗提示“预约xxx成功”
@@ -18,6 +18,7 @@ Forked from [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/Shuaic
 - 不下依赖包用个der啊
 
 ## 使用
+```py main.py``` 或者直接运行```run.bat```
 - 通过修改```main.py```中```user_id```和```password```来设置账号密码
 - 修改```room_id```字段选择对应房间，我只注释了令希的，平时不去博川
 - 修改```favorSeats```字段来设定自己喜欢的座位（群）
