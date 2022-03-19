@@ -4,8 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ae783c08-ec51-4dfc-9548-e568c6d4367d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>src\main_input.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,19 +23,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="driver\" />
+    <Folder Include="logo\" />
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
     <Content Include="driver\chromedriver.exe" />
+    <Content Include="logo\ha1bg.jpg" />
+    <Content Include="logo\logo.ico" />
+    <Content Include="logo\logo.png" />
+    <Content Include="logo\logo.psd" />
+    <Content Include="logo\logo.svg" />
     <Content Include="README.md" />
     <Content Include="src\run.bat" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\functiontest.py" />
     <Compile Include="src\functiontest2.py" />
-    <Compile Include="src\main.py" />
+    <Compile Include="src\main_auto.py" />
+    <Compile Include="src\main_input.py" />
     <Compile Include="src\my.py" />
     <Compile Include="src\test.py" />
   </ItemGroup>
