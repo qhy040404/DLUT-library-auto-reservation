@@ -1,11 +1,11 @@
 #define MyAppName "大连理工大学图书馆自动预约座位小程序-输入版"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "qhy040404"
 #define MyAppURL "https://github.com/qhy040404/DLUT-library-auto-reservation"
 #define MyAppExeName "main_input.exe"
 
 [Setup]
-AppId={{BBF7BDD6-FCB4-437C-B8CF-77B64214A325}
+AppId={{AF82D06B-5781-4307-B58F-B0E4D317D71B}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}

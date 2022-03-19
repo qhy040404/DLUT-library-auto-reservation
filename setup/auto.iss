@@ -1,5 +1,5 @@
 #define MyAppName "大连理工大学图书馆自动预约座位小程序-自动化"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "qhy040404"
 #define MyAppURL "https://github.com/qhy040404/DLUT-library-auto-reservation"
 #define MyAppExeName "main_auto.exe"
@@ -46,7 +46,7 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{app}\config.txt"; Description: "修改配置文件（学号、密码等）"; Flags: nowait postinstall skipifsilent
-Filename: "{app}\seat.txt"; Description: "修改期望座位"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent unchecked
+Filename: "{app}\config.txt"; Description: "修改配置文件（学号、密码等）"; Flags: nowait postinstall skipifsilent shellexec
+Filename: "{app}\seats.txt"; Description: "修改期望座位"; Flags: nowait postinstall skipifsilent shellexec            
 
