@@ -1,6 +1,6 @@
 # 大连理工大学图书馆自动预约座位小程序
 
-Forked from [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
+框架来自于[ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
 
 ## 特性
 - 如果预约成功，程序会弹窗提示“预约xxx成功”
