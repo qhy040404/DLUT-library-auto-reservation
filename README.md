@@ -12,6 +12,7 @@
 ## 依赖项
 - [Chromedriver](https://chromedriver.chromium.org/downloads) 记得下载对应版本，解压到```/driver```文件夹里
   - 编译进安装包内的Chromedriver对应Chrome99，如版本不同请到[此处](https://chromedriver.chromium.org/downloads)自行下载对应版本
+  - 或者下载最新版[Chrome](https://www.google.cn/chrome)
 - [Python](https://www.python.org/downloads/) 
 - selenium （推荐使用[pip](https://pip.pypa.io/en/stable/installation/)）
   - ```pip install -U selenium``` (For Linux)
