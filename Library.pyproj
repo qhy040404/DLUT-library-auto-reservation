@@ -24,16 +24,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="driver\" />
-    <Folder Include="files\" />
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
     <Content Include="driver\chromedriver.exe" />
-    <Content Include="files\dddd.jpg" />
-    <Content Include="files\picture1.jpg" />
-    <Content Include="files\picture2.png" />
     <Content Include="README.md" />
     <Content Include="src\run.bat" />
   </ItemGroup>
