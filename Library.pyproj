@@ -12,6 +12,7 @@
     <OutputPath>.</OutputPath>
     <Name>Library</Name>
     <RootNamespace>Library</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

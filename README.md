@@ -15,11 +15,7 @@ Forked from [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/Shuaic
 - selenium （推荐使用[pip](https://pip.pypa.io/en/stable/installation/)）
   - ```pip install -U selenium``` (For Linux)
   - ```py -m pip install -U selenium``` (For Windows)
-
-
 - 不下依赖包用个der啊
-
-  ![](files/dddd.jpg)
 
 ## 使用
 - 通过修改```main.py```中```user_id```和```password```来设置账号密码
