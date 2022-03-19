@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ae783c08-ec51-4dfc-9548-e568c6d4367d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\main_input.py</StartupFile>
+    <StartupFile>src\main_auto.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -36,6 +36,9 @@
     <Content Include="logo\logo.psd" />
     <Content Include="logo\logo.svg" />
     <Content Include="README.md" />
+    <Content Include="src\Chart.xlsx" />
+    <Content Include="src\config.txt" />
+    <Content Include="src\seats.txt" />
     <Content Include="src\run.bat" />
   </ItemGroup>
   <ItemGroup>
