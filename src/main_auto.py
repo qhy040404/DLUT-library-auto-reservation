@@ -10,6 +10,7 @@ main
 
 # import
 import time
+import tkinter
 import tkinter.messagebox
 from selenium import webdriver
 from selenium.webdriver.common import service
@@ -73,7 +74,10 @@ for tab in allTabs:
         try:
             time.sleep(0.5)
             confirm_button.click()
+            top = tkinter.Tk()
+            top.geometry('0x0+999999+0')
             tkinter.messagebox.showinfo("大连理工大学图书馆自动预约座位小程序","预约%s成功" % current_seat)
+            top.destroy()
             break
         except:
             continue
