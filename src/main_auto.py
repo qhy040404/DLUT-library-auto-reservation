@@ -10,8 +10,8 @@ main
 
 # import
 import time
-import tkinter
-import tkinter.messagebox
+#import tkinter
+#import tkinter.messagebox
 from selenium import webdriver
 from selenium.webdriver.common import service
 from selenium.webdriver.common.action_chains import ActionChains
@@ -68,16 +68,16 @@ time.sleep(1)
 allTabs = browser.find_elements(By.CSS_SELECTOR,"i[class='seat-label']")
 for tab in allTabs:
     if tab.text in favorSeats:
-        current_seat = tab.text
+        #current_seat = tab.text
         tab.click()
         confirm_button = browser.find_element(By.ID,'btn_submit_addorder')
         try:
             time.sleep(0.5)
             confirm_button.click()
-            top = tkinter.Tk()
-            top.geometry('0x0+999999+0')
-            tkinter.messagebox.showinfo("大连理工大学图书馆自动预约座位小程序","预约%s成功" % current_seat)
-            top.destroy()
+            #top = tkinter.Tk()
+            #top.geometry('0x0+999999+0')
+            #tkinter.messagebox.showinfo("大连理工大学图书馆自动预约座位小程序","预约%s成功" % current_seat)
+            #top.destroy()
             break
         except:
             continue
@@ -86,4 +86,4 @@ time.sleep(2)
 '''注销操作并关闭窗口'''
 browser.get("http://seat.lib.dlut.edu.cn/yanxiujian/client/loginOut.php")
 time.sleep(1)
-browser.close()
+browser.quit()

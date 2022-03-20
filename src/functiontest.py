@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 browser = webdriver.Chrome(executable_path='driver/chromedriver.exe')
 browser.maximize_window()
 
-browser.get('http://seat.lib.dlut.edu.cn/yanxiujian/client/orderSeat.php?method=addSeat&room_id=208&area_id=32')
+'''browser.get('http://seat.lib.dlut.edu.cn/yanxiujian/client/orderSeat.php?method=addSeat&room_id=208&area_id=32')
 today_button = browser.find_element_by_id('todayBtn')
 today_button.click()
 tomorrow_button = browser.find_element_by_id('nextDayBtn')
@@ -31,3 +31,7 @@ for tab in allTabs:
         except:
             continue
 time.sleep(2)
+'''
+
+time.sleep(1)
+browser.quit()
