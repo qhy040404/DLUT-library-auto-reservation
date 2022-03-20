@@ -33,6 +33,7 @@
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
     <Content Include="driver\chromedriver.exe" />
+    <Content Include="future.txt" />
     <Content Include="LICENSE" />
     <Content Include="logo\ha1bg.jpg" />
     <Content Include="logo\logo.ico" />
