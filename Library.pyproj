@@ -55,6 +55,7 @@
     <Content Include="src\config.txt" />
     <Content Include="src\seats.txt" />
     <Content Include="src\run.bat" />
+    <Content Include="updatelog.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\functiontest.py" />
