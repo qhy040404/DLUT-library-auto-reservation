@@ -8,6 +8,7 @@ test.py
 my.py
 exe/
 output/
+updatelog.txt
 
 # User-specific files
 *.rsuser
