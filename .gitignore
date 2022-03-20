@@ -9,7 +9,6 @@ my.py
 exe/
 output/
 updatelog.txt
-future.txt
 
 # User-specific files
 *.rsuser
