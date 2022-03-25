@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ae783c08-ec51-4dfc-9548-e568c6d4367d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\main_auto.py</StartupFile>
+    <StartupFile>src\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -63,7 +63,7 @@
     <Compile Include="backup\main_input.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\main_auto.py" />
+    <Compile Include="src\main.py" />
     <Compile Include="src\my.py" />
     <Compile Include="src\test.py" />
   </ItemGroup>
