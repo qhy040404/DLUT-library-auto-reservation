@@ -25,6 +25,7 @@
 - 直接运行源程序
   - 运行配置生成器来生成配置文件
   - 生成器需要管理员权限才能在安装目录生成配置文件
+  - 配置生成器可以到[这里](https://github.com/qhy040404/Library-reservation-configGenerator/releases)下载独立文件，拷贝至py源文件目录运行
 - 运行打包后的程序
   - 在[Releases](https://github.com/qhy040404/DLUT-library-auto-reservation/releases)中下载最新版安装使用即可
 
