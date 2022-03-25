@@ -25,6 +25,7 @@
   <ItemGroup>
     <Folder Include="driver\" />
     <Folder Include="logo\" />
+    <Folder Include="backup\" />
     <Folder Include="setup\" />
     <Folder Include="setup\images\" />
     <Folder Include="setup\output\" />
@@ -60,10 +61,10 @@
     <Content Include="updatelog.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\main_auto.py" />
-    <Compile Include="src\main_input.py">
-      <Publish>True</Publish>
+    <Compile Include="backup\main_input.py">
+      <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\main_auto.py" />
     <Compile Include="src\my.py" />
     <Compile Include="src\test.py" />
   </ItemGroup>

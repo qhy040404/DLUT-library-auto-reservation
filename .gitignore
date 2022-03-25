@@ -10,7 +10,7 @@ exe/
 output/
 updatelog.txt
 future.txt
-main_input.*
+backup/
 
 # User-specific files
 *.rsuser
