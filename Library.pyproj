@@ -53,9 +53,7 @@
     <Content Include="setup\images\175small.bmp" />
     <Content Include="setup\images\bmp.psd" />
     <Content Include="backup\input.iss" />
-    <Content Include="src\Chart.xlsx" />
-    <Content Include="src\config.txt" />
-    <Content Include="src\seats.txt" />
+    <Content Include="src\config.conf" />
     <Content Include="src\run.bat" />
     <Content Include="updatelog.txt" />
   </ItemGroup>
@@ -64,8 +62,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\main.py" />
-    <Compile Include="src\my.py" />
-    <Compile Include="src\test.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
