@@ -51,11 +51,13 @@ def send_email(seat_id = None, successful = True):
     mailData.strip('\n')
     mailData = mailData.split()
 
-    mail_host = mailData[0]
-    mail_user = mailData[1]
-    mail_pass = mailData[2]
-    sender = mailData[3]
-    receiver = mailData[1]
+    mail_user = mailData[0]
+    mail_pass = mailData[1]
+    sender = mailData[0]
+    receiver = mailData[0]
+    mail_temp_data = mail_user.split('@')
+    mail_host_pre = 'smtp.'
+    mail_host = mail_host_pre + mail_temp_data[1]
 
     if successful:
         context = '成功，座位位于' + area_name + '的' + room_name + '阅览室的' + seat_id + '座'
@@ -67,12 +69,8 @@ def send_email(seat_id = None, successful = True):
     message['From'] = sender
     message['To'] = receiver
 
-    if mail_host is 'smtp.qq.com':
-        smtpObj = smtplib.SMTP_SSL()
-        smtpObj.connect(mail_host, 465)
-    else:
-        smtpObj = smtplib.SMTP()
-        smtpObj.connect(mail_host, 25)
+    smtpObj = smtplib.SMTP_SSL()
+    smtpObj.connect(mail_host, 465)
     smtpObj.login(mail_user, mail_pass)
     smtpObj.sendmail(sender, receiver, message.as_string())
     smtpObj.quit()
