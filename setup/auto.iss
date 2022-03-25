@@ -34,8 +34,8 @@ Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; 
 
 [Files]
-Source: "J:\VSProjs\Library\exe\auto\dist\main\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "J:\VSProjs\Library\exe\auto\dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "J:\VSProjs\Library\exe\dist\main\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "J:\VSProjs\Library\exe\dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "J:\VSProjs\Library\src\config.conf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "J:\VSProjs\Library\driver\chromedriver.exe"; DestDir: "{app}/driver"; Flags: ignoreversion
 Source: "J:\VSProjs\Library-reservation-configGenerator\x64\Release\ConfigGenerator.exe"; DestDir: "{app}"; Flags: ignoreversion
