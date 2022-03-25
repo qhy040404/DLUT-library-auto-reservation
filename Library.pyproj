@@ -4,7 +4,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ae783c08-ec51-4dfc-9548-e568c6d4367d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\functiontest.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -59,10 +60,10 @@
     <Content Include="updatelog.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\functiontest.py" />
-    <Compile Include="src\functiontest2.py" />
     <Compile Include="src\main_auto.py" />
-    <Compile Include="src\main_input.py" />
+    <Compile Include="src\main_input.py">
+      <Publish>True</Publish>
+    </Compile>
     <Compile Include="src\my.py" />
     <Compile Include="src\test.py" />
   </ItemGroup>
