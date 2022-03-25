@@ -52,7 +52,7 @@
     <Content Include="setup\images\175.bmp" />
     <Content Include="setup\images\175small.bmp" />
     <Content Include="setup\images\bmp.psd" />
-    <Content Include="setup\input.iss" />
+    <Content Include="backup\input.iss" />
     <Content Include="src\Chart.xlsx" />
     <Content Include="src\config.txt" />
     <Content Include="src\seats.txt" />
