@@ -1,5 +1,5 @@
 #define MyAppName "大连理工大学图书馆自动预约座位小程序"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.2.0"
 #define MyAppPublisher "qhy040404"
 #define MyAppURL "https://github.com/qhy040404/DLUT-library-auto-reservation"
 #define MyAppExeName "main.exe"
@@ -36,10 +36,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "J:\VSProjs\Library\exe\auto\dist\main\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "J:\VSProjs\Library\exe\auto\dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "J:\VSProjs\Library\src\Chart.xlsx"; DestDir: "{app}"; Flags: ignoreversion
-Source: "J:\VSProjs\Library\src\config.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "J:\VSProjs\Library\src\seats.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "J:\VSProjs\Library\src\config.conf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "J:\VSProjs\Library\driver\chromedriver.exe"; DestDir: "{app}/driver"; Flags: ignoreversion
+Source: "J:\VSProjs\Library-reservation-configGenerator\x64\Release\ConfigGenerator.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -47,6 +46,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent unchecked
-Filename: "{app}\config.txt"; Description: "修改配置文件（学号、密码等）"; Flags: nowait postinstall skipifsilent shellexec
-Filename: "{app}\seats.txt"; Description: "修改期望座位"; Flags: nowait postinstall skipifsilent shellexec            
-
+Filename: "{app}\ConfigGenerator.exe"; Description: "运行配置生成器"; Flags: nowait postinstall skipifsilent
