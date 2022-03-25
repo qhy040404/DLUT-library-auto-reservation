@@ -10,7 +10,6 @@ main
 
 # import
 import time
-from typing import ContextManager
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -48,7 +47,6 @@ seatData.strip('\n')
 favorSeats = seatData.split()
 
 def send_email(seat_id = None, successful = True):
-    mailData = configData.readlines()
     mailData = configData.pop(0)
     mailData.strip('\n')
     mailData = mailData.split()
@@ -116,13 +114,19 @@ for tab in allTabs:
             confirm_button.click()
             seat_id = tab.text
             flag = True
-            send_email(seat_id, successful = True)
+            if configData:
+                send_email(seat_id, successful = True)
+            else:
+                pass
             break
         except:
             continue
 
 if not flag:
-    send_email(successful = False)
+    if configData:
+        send_email(successful = False)
+    else:
+        pass
 
 time.sleep(2)
 
