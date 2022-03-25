@@ -67,7 +67,7 @@ def send_email(seat_id = None, successful = True):
     message['From'] = sender
     message['To'] = receiver
 
-    if mail_host = 'smtp.qq.com':
+    if mail_host is 'smtp.qq.com':
         smtpObj = smtplib.SMTP_SSL()
         smtpObj.connect(mail_host, 465)
     else:
