@@ -21,10 +21,13 @@
   - 编译进安装包内的Chromedriver对应Chrome99，如版本不同请到[此处](https://chromedriver.chromium.org/downloads)自行下载对应版本
   - 或者下载最新版[Chrome](https://www.google.cn/chrome)
 
-
 ## 使用
 - 直接运行源程序
   - 运行配置生成器来生成配置文件
   - 生成器需要管理员权限才能在安装目录生成配置文件
 - 运行打包后的程序
   - 在[Releases](https://github.com/qhy040404/DLUT-library-auto-reservation/releases)中下载最新版安装使用即可
+
+## 链接
+- [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
+- [配置生成器](https://github.com/qhy040404/Library-reservation-configGenerator)
