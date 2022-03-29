@@ -1,5 +1,5 @@
 #define MyAppName "大连理工大学图书馆自动预约座位小程序"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.2.1"
 #define MyAppPublisher "qhy040404"
 #define MyAppURL "https://github.com/qhy040404/DLUT-library-auto-reservation"
 #define MyAppExeName "main.exe"
@@ -32,6 +32,7 @@ Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; 
+Name: "startfolder"; Description: "创建开始菜单文件夹(&P)"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
 Source: "J:\VSProjs\Library\exe\dist\main\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
@@ -41,9 +42,10 @@ Source: "J:\VSProjs\Library\driver\chromedriver.exe"; DestDir: "{app}/driver"; F
 Source: "J:\VSProjs\Library-reservation-configGenerator\x64\Release\ConfigGenerator.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: {app}; Tasks: desktopicon
-Name: {autodesktop}\配置生成器; Filename: {app}\ConfigGenerator.exe; WorkingDir: {app}; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Tasks: startfolder
+Name: "{autoprograms}\{#MyAppName}\配置生成器"; Filename: "{app}\ConfigGenerator.exe"; WorkingDir: "{app}"; Tasks: startfolder
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{autodesktop}\配置生成器"; Filename: "{app}\ConfigGenerator.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent unchecked
