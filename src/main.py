@@ -44,7 +44,7 @@ room_id = room_map.get(area_id).get(room_name)
 
 seatData = configData.pop(0)
 seatData.strip('\n')
-favorSeats = seatData.split()
+favorSeats = seatData.split("-")
 
 def send_email(seat_id = None, successful = True):
     mailData = configData.pop(0)
