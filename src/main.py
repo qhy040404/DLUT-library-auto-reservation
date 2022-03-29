@@ -59,6 +59,8 @@ def send_email(seat_id = None, successful = True):
     mail_host_pre = 'smtp.'
     mail_host = mail_host_pre + mail_temp_data[1]
 
+    print("Sending email...")
+
     if successful:
         context = '成功，座位位于' + area_name + '的' + room_name + '阅览室的' + seat_id + '座'
     else:
