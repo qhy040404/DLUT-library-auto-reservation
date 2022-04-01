@@ -32,7 +32,7 @@ with open("config.conf","r") as config:
     configData.pop(0)
 
 data = configData.pop(0)
-data.strip('\n')
+data = data.strip('\n')
 data = data.split()
 
 user_id = data[0]
@@ -43,12 +43,12 @@ area_id = area_map.get(area_name)
 room_id = room_map.get(area_id).get(room_name)
 
 seatData = configData.pop(0)
-seatData.strip('\n')
+seatData = seatData.strip('\n')
 favorSeats = seatData.split("-")
 
 def send_email(seat_id = None, successful = True):
     mailData = configData.pop(0)
-    mailData.strip('\n')
+    mailData = mailData.strip('\n')
     mailData = mailData.split()
 
     mail_user = mailData[0]
