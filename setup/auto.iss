@@ -1,5 +1,5 @@
 #define MyAppName "大连理工大学图书馆自动预约座位小程序"
-#define MyAppVersion "1.2.2"
+#define MyAppVersion "1.3.0.0"
 #define MyAppPublisher "qhy040404"
 #define MyAppURL "https://github.com/qhy040404/DLUT-library-auto-reservation"
 #define MyAppExeName "main.exe"

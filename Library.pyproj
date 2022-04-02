@@ -53,6 +53,7 @@
     <Content Include="setup\images\175small.bmp" />
     <Content Include="setup\images\bmp.psd" />
     <Content Include="backup\input.iss" />
+    <Content Include="src\build.bat" />
     <Content Include="src\config.conf" />
     <Content Include="src\run.bat" />
     <Content Include="updatelog.txt" />

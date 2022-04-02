@@ -12,6 +12,7 @@ updatelog.txt
 future.txt
 backup/
 /config.conf
+/src/logo.ico
 
 # User-specific files
 *.rsuser
