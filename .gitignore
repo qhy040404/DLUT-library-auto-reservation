@@ -11,6 +11,7 @@ output/
 updatelog.txt
 future.txt
 backup/
+/config.conf
 
 # User-specific files
 *.rsuser
@@ -371,3 +372,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+

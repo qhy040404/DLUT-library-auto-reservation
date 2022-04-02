@@ -70,8 +70,7 @@ def send_email(seat_id = None, successful = True):
     message['From'] = sender
     message['To'] = receiver
 
-    smtpObj = smtplib.SMTP()
-    smtpObj.connect(host=mail_host, port=25)
+    smtpObj = smtplib.SMTP_SSL(mail_host,465)
     smtpObj.login(mail_user, mail_pass)
     smtpObj.sendmail(sender, receiver, message.as_string())
     smtpObj.quit()
