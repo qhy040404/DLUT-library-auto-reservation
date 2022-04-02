@@ -11,7 +11,6 @@ main
 # import
 import time
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 import smtplib
 from email.mime.text import MIMEText
@@ -87,40 +86,40 @@ browser = webdriver.Chrome(service=s)
 
 '''登录'''
 browser.get("https://sso.dlut.edu.cn/cas/login?service=http://seat.lib.dlut.edu.cn/yanxiujian/client/login.php?redirect=index.php")
-input_userid = browser.find_element(By.ID,'un')
+input_userid = browser.find_element_by_id('un')
 input_userid.send_keys(user_id)
-input_password = browser.find_element(By.ID,'pd')
+input_password = browser.find_element_by_id('pd')
 input_password.send_keys(password)
-login_button = browser.find_element(By.CLASS_NAME,'login_box_landing_btn')
+login_button = browser.find_element_by_class_name('login_box_landing_btn')
 login_button.click()
 
 '''更改想要去的房间号，选取第二天的座位图'''
 browser.get(finalUrl)
-today_button = browser.find_element(By.ID,'todayBtn')
+today_button = browser.find_element_by_id('todayBtn')
 today_button.click()
-tomorrow_button = browser.find_element(By.ID,'nextDayBtn')
+tomorrow_button = browser.find_element_by_id('nextDayBtn')
 tomorrow_button.click()
 time.sleep(1)
 
 '''与原作者采用了不一样的方法，可以精确定位想要的位置'''
 flag = False
-allTabs = browser.find_elements(By.CSS_SELECTOR,"i[class='seat-label']")
-for tab in allTabs:
-    if tab.text in favorSeats:
-        tab.click()
-        confirm_button = browser.find_element(By.ID,'btn_submit_addorder')
-        try:
-            time.sleep(0.5)
-            confirm_button.click()
-            seat_id = tab.text
-            flag = True
-            if configData:
-                send_email(seat_id, successful = True)
-            else:
-                pass
-            break
-        except:
-            continue
+for i in range(0,len(favorSeats)):
+    target = favorSeats[i]
+    tab = browser.find_element_by_xpath("//table/tbody//tr//td/div[@class='seat-normal']/i[contains(text()," + target + ")]")
+    tab.click()
+    confirm_button = browser.find_element_by_id('btn_submit_addorder')
+    try:
+        time.sleep(0.5)
+        confirm_button.click()
+        seat_id = tab.text
+        flag = True
+        if configData:
+            send_email(seat_id, successful = True)
+        else:
+            pass
+        break
+    except:
+        continue
 
 if not flag:
     if configData:
