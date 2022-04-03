@@ -1,1 +1,1 @@
-python main_input.py
+python main.py
