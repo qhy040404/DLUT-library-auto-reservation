@@ -1,12 +1,4 @@
 # coding=utf-8
-'''
-main
-@author: Shuaichi Li
-@editor: qhy040404
-@email: shuaichi@mail.dlut.edu.cn
-@editor.email: qhy040404@mail.dlut.edu.cn
-@date: 2022/03/19 19:30
-'''
 
 # import
 import time
@@ -84,7 +76,7 @@ while configData:
     s = Service(r'driver/chromedriver.exe')
     browser = webdriver.Chrome(service=s)
 
-    '''登录'''
+    # 登录
     browser.get("https://sso.dlut.edu.cn/cas/login?service=http://seat.lib.dlut.edu.cn/yanxiujian/client/login.php?redirect=index.php")
     input_userid = browser.find_element_by_id('un')
     input_userid.send_keys(user_id)
@@ -93,7 +85,7 @@ while configData:
     login_button = browser.find_element_by_class_name('login_box_landing_btn')
     login_button.click()
 
-    '''更改想要去的房间号，选取第二天的座位图'''
+    # 更改想要去的房间号，选取第二天的座位图
     browser.get(finalUrl)
     today_button = browser.find_element_by_id('todayBtn')
     today_button.click()
@@ -101,9 +93,9 @@ while configData:
     tomorrow_button.click()
     time.sleep(1)
 
-    '''与原作者采用了不一样的方法，可以精确定位想要的位置'''
+    # 与原作者采用了不一样的方法，可以精确定位想要的位置
     flag = False
-    for i in range(0, len(favorSeats)):
+    for i,item in enumerate(favorSeats):
         target = favorSeats[i]
         tab = browser.find_element_by_xpath("//table/tbody//tr//td/div[@class='seat-normal']/i[contains(text()," + target + ")]")
         tab.click()
@@ -131,7 +123,7 @@ while configData:
 
     time.sleep(2)
 
-    '''注销操作并关闭窗口'''
+    # 注销操作并关闭窗口
     browser.get("http://seat.lib.dlut.edu.cn/yanxiujian/client/loginOut.php")
     time.sleep(1)
     browser.quit()
