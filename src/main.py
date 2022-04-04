@@ -28,9 +28,9 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 # Read config
 with open("config.conf","r") as config:
     configData = config.readlines()
-    configData.pop(0)
 
 while configData:
+    configData.pop(0)
     data = configData.pop(0)
     data = data.strip('\n')
     data = data.split()
