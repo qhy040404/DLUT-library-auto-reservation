@@ -1,4 +1,4 @@
-name: Compile to exe-CI
+name: Compile-CI
 
 on:
   push:
