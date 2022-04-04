@@ -1,5 +1,10 @@
 # 大连理工大学图书馆自动预约座位小程序
 
+[![Build status (GitHub)](https://img.shields.io/github/workflow/status/qhy040404/DLUT-library-auto-reservation/Compile-CI/master?label=Compile&logo=github&cacheSeconds=600)](https://github.com/Two-Super-Boss/C-Homework-DLUT/actions)
+[![CodeFactor](https://www.codefactor.io/repository/github/two-super-boss/c-homework-dlut/badge)](https://www.codefactor.io/repository/github/two-super-boss/c-homework-dlut)
+[![Github last commit date](https://img.shields.io/github/last-commit/Two-Super-Boss/C-Homework-DLUT.svg?label=Updated&logo=github&cacheSeconds=600)](https://github.com/Two-Super-Boss/C-Homework-DLUT/commits)
+[![License](https://img.shields.io/github/license/Two-Super-Boss/C-Homework-DLUT.svg?label=License&logo=github&cacheSeconds=2592000)](https://github.com/Two-Super-Boss/C-Homework-DLUT/blob/master/LICENSE)
+
 框架来自于[ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
 
 ## 特性
