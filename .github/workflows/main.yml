@@ -18,7 +18,7 @@ jobs:
       - name: Update system dependence
         run: |
           sudo apt update
-          sudo apt install -y python python3 pip pip3
+          sudo apt install -y python python3 pip
 
       - name: Install selenium
         run: sudo pip install selenium pyinstaller -y
