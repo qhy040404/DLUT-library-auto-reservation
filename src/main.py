@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import smtplib
 from email.mime.text import MIMEText
+import traceback
 
 # initialize
 area_map = {'伯川': '17', '令希': '32'}
@@ -63,10 +64,14 @@ while configData:
         message['From'] = sender
         message['To'] = receiver
 
-        smtpObj = smtplib.SMTP_SSL(mail_host,465)
-        smtpObj.login(mail_user, mail_pass)
-        smtpObj.sendmail(sender, receiver, message.as_string())
-        smtpObj.quit()
+        try:
+            smtpObj = smtplib.SMTP_SSL(mail_host,465)
+            smtpObj.login(mail_user, mail_pass)
+            smtpObj.sendmail(sender, receiver, message.as_string())
+            smtpObj.quit()
+            print('success')
+        except smtplib.SMTPException as e:
+            print('error', e)
 
     url = ['http://seat.lib.dlut.edu.cn/yanxiujian/client/orderSeat.php?method=addSeat&room_id=','&area_id=']
     url.insert(1,room_id)
@@ -111,7 +116,9 @@ while configData:
                 if len(val_list) == 2:
                     send_email(seat_id, successful = True)
             break
-        except:
+        except Exception as e:
+            traceback.extract_stack()
+            print(e)
             continue
 
     if not flag:
