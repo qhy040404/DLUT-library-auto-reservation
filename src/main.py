@@ -129,7 +129,7 @@ while configData:
                 send_email(successful = False)
 
     time.sleep(2)
-    ''
+
     # 注销操作并关闭窗口
     browser.get("http://seat.lib.dlut.edu.cn/yanxiujian/client/loginOut.php")
     time.sleep(1)
