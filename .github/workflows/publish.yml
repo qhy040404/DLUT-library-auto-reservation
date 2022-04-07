@@ -93,7 +93,6 @@ jobs:
         Set-StrictMode -Version Latest
         New-Item -Name out -type "directory"
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
-        Copy-Item "src\dist\*" "out" -Recurse
     
     - name: Create zip file on Linux
       if: startsWith(matrix.os, 'ubuntu-')
@@ -192,8 +191,6 @@ jobs:
                 fi
                 ;;
         esac
-
-        ls
       
     - name: Create zip file on Windows
       if: startsWith(matrix.os, 'windows-')
@@ -231,7 +228,7 @@ jobs:
       uses: actions/upload-artifact@v3.0.0
       with:
         name: ${{ matrix.os }}_Library-osx
-        path: out/Library-osx.zip
+        path: Library-osx.zip
 
     - name: Upload Library-win
       if: startsWith(matrix.os, 'windows-')
