@@ -24,13 +24,13 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2.0.0
-      with:
-        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+    - name: Add MSBuild to PATH
+      if: startsWith(matrix.os, 'windows-')
+      uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Verify .NET Core
-      run: dotnet --info
+    - name: Verify MSBuild
+      if: startsWith(matrix.os, 'windows-')
+      run: msbuild -version
 
     - name: Verify Python and pip packages (win&linux)
       if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'ubuntu-')
@@ -54,10 +54,7 @@ jobs:
         $ErrorActionPreference = 'Stop'
         $ProgressPreference = 'SilentlyContinue'
         
-        cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools"
-        .\Launch-VsDevShell.ps1
-
-        cd "D:\a\DLUT-library-auto-reservation\DLUT-library-auto-reservation\ConfigGenerator
+        cd ConfigGenerator
 
         $PublishBlock = {
             param()
@@ -71,15 +68,10 @@ jobs:
             $targetFramework = $env:NET_CORE_VERSION
             $variantArgs = '-p:PublishSingleFile=true', '-p:PublishTrimmed=true', '-r', "$variant", '--self-contained'
 
-            dotnet publish ConfigGenerator -c "$env:CONFIGURATION" -f "$targetFramework" -o "out\" -p:ContinuousIntegrationBuild=true --no-restore --nologo $variantArgs
+            msbuild -t:Build -p:Configuration=$env.CONFIGURATION -p:OutDir="out\" -nologo
 
             if ($LastExitCode -ne 0) {
                 throw "Last command failed."
-            }
-
-            # Icon is available only in .NET Framework and .NET Core Windows build, we'll bundle the .ico file for other flavours
-            if (($targetFramework -eq "$env:NET_CORE_VERSION") -and !(Test-Path "out\ConfigGenerator.exe" -PathType Leaf)) {
-                Copy-Item 'icon\icon.ico' "out\icon.ico"
             }
         }
     
