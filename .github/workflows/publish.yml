@@ -43,14 +43,14 @@ jobs:
       if: startsWith(matrix.os, 'macos-')
       run: |
         python3 --version
-        pip install requests
-        pip install pyinstaller
+        python3 -m pip install requests
+        python3 -m pip install pyinstaller
     
-    - name: Restore packages in preparation for ConfigGenerator publishing (win)
-      if: startsWith(matrix.os, 'windows-')
-      run: |
-        cd ConfigGenerator
-        dotnet restore ConfigGenerator -p:ContinuousIntegrationBuild=true --nologo
+#    - name: Restore packages in preparation for ConfigGenerator publishing (win)
+#      if: startsWith(matrix.os, 'windows-')
+#      run: |
+#        cd ConfigGenerator
+#        dotnet restore ConfigGenerator -p:ContinuousIntegrationBuild=true --nologo
 
     - name: Publish ConfigGenerator on Windows
       if: startsWith(matrix.os, 'windows-')
@@ -92,6 +92,7 @@ jobs:
       run: |
         cd src
         pyinstaller -i logo.ico -F --version-file version main.py --distpath=./dist/
+        ls
         cd ..
         cp -pR "/src/dist/*" "/out/"
     
