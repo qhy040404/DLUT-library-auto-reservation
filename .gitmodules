@@ -1,0 +1,3 @@
+[submodule "ConfigGenerator"]
+	path = ConfigGenerator
+	url = https://github.com/qhy040404/Library-reservation-configGenerator.git
