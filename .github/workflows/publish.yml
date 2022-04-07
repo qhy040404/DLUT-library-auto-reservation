@@ -91,9 +91,8 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       run: |
         Set-StrictMode -Version Latest
-        cd src
-        pyinstaller -i logo.ico -F --version-file version main.py
-        cd ..
+        New-Item -Path ${GITHUB_WORKSPACE} -Name out -type "directory"
+        pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
         Copy-Item "src\dist\*" "out" -Recurse
     
     - name: Create zip file on Linux
@@ -218,6 +217,7 @@ jobs:
     
 
     - name: Upload Library-linux
+      if: startsWith(matrix.os, 'ubuntu-')
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
@@ -225,6 +225,7 @@ jobs:
         path: out/Library-linux.zip
 
     - name: Upload Library-osx
+      if: startsWith(matrix.os, 'macos-')
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
@@ -232,6 +233,7 @@ jobs:
         path: out/Library-osx.zip
 
     - name: Upload Library-win
+      if: startsWith(matrix.os, 'windows-')
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
@@ -251,6 +253,12 @@ jobs:
       uses: actions/download-artifact@v3.0.0
       with:
         name: macos-latest_Library-osx
+        path: out
+
+    - name: Download Library-linux artifact from macos-latest
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: ubuntu-latest_Library-linux
         path: out
 
     - name: Download Library-win artifact from windows-latest
