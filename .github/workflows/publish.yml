@@ -53,7 +53,11 @@ jobs:
         Set-StrictMode -Version Latest
         $ErrorActionPreference = 'Stop'
         $ProgressPreference = 'SilentlyContinue'
-        cd ConfigGenerator
+        
+        cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools"
+        .\Launch-VsDevShell.ps1
+
+        cd "D:\a\DLUT-library-auto-reservation\DLUT-library-auto-reservation\ConfigGenerator
 
         $PublishBlock = {
             param()
@@ -65,8 +69,9 @@ jobs:
             Set-Location "$env:GITHUB_WORKSPACE"
 
             $targetFramework = $env:NET_CORE_VERSION
+            $variantArgs = '-p:PublishSingleFile=true', '-p:PublishTrimmed=true', '-r', "$variant", '--self-contained'
 
-            dotnet publish ConfigGenerator -c "$env:CONFIGURATION" -f "$targetFramework" -o "out\" -p:ContinuousIntegrationBuild=true --no-restore --nologo 
+            dotnet publish ConfigGenerator -c "$env:CONFIGURATION" -f "$targetFramework" -o "out\" -p:ContinuousIntegrationBuild=true --no-restore --nologo $variantArgs
 
             if ($LastExitCode -ne 0) {
                 throw "Last command failed."
