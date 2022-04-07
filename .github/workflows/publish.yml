@@ -46,12 +46,6 @@ jobs:
         python3 -m pip install requests
         python3 -m pip install pyinstaller
     
-#    - name: Restore packages in preparation for ConfigGenerator publishing (win)
-#      if: startsWith(matrix.os, 'windows-')
-#      run: |
-#        cd ConfigGenerator
-#        dotnet restore ConfigGenerator -p:ContinuousIntegrationBuild=true --nologo
-
     - name: Publish ConfigGenerator on Windows
       if: startsWith(matrix.os, 'windows-')
       shell: pwsh
@@ -102,10 +96,8 @@ jobs:
         cd ..
         Copy-Item "src\dist\*" "out\" -Recurse
     
-    - name: Create zip file on Unix
-      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
-      env: 
-        VARIANTS: linux osx
+    - name: Create zip file on Linux
+      if: startsWith(matrix.os, 'ubuntu-')
       shell: sh
       run: |
         cp "src/config.conf" "out/"
@@ -128,11 +120,11 @@ jobs:
                 # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
                 if command -v zip >/dev/null; then
                     (
-                        cd "${GITHUB_WORKSPACE}/out/${1}"
-                        zip -q -r $zip_args "../Library-${1}.zip" .
+                        cd "${GITHUB_WORKSPACE}/out"
+                        zip -q -r $zip_args "../Library-linux.zip" .
                     )
                 elif command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-${1}.zip" "${GITHUB_WORKSPACE}/out/${1}/*"
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
                 else
                     echo "ERROR: No supported zip tool!"
                     return 1
@@ -140,11 +132,60 @@ jobs:
                 ;;
             *)
                 if command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-${1}.zip" "${GITHUB_WORKSPACE}/out/${1}/*"
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
                 elif command -v zip >/dev/null; then
                     (
-                        cd "${GITHUB_WORKSPACE}/out/${1}"
-                        zip -q -r $zip_args "../Library-${1}.zip" .
+                        cd "${GITHUB_WORKSPACE}/out"
+                        zip -q -r $zip_args "../Library-linux.zip" .
+                    )
+                else
+                    echo "ERROR: No supported zip tool!"
+                    return 1
+                fi
+                ;;
+        esac
+
+    - name: Create zip file on macOS
+      if: startsWith(matrix.os, 'macos-')
+      shell: sh
+      run: |
+        cp "src/config.conf" "out/"
+        cp "src/example.conf" "out/"
+        
+        # By default use fastest compression
+        seven_zip_args="-mx=1"
+        zip_args="-1"
+
+        # Include extra logic for builds marked for release
+        case "$GITHUB_REF" in
+            "refs/tags/"*)
+                # Tweak compression args for release publishing
+                seven_zip_args="-mx=9 -mfb=258 -mpass=15"
+                zip_args="-9"
+        esac
+        
+        case "$(uname -s)" in
+            "Darwin")
+                # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
+                if command -v zip >/dev/null; then
+                    (
+                        cd "${GITHUB_WORKSPACE}/out"
+                        zip -q -r $zip_args "../Library-osx.zip" .
+                    )
+                elif command -v 7z >/dev/null; then
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
+                else
+                    echo "ERROR: No supported zip tool!"
+                    return 1
+                fi
+                ;;
+            *)
+                if command -v 7z >/dev/null; then
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
+                elif command -v zip >/dev/null; then
+                    (
+                        cd "${GITHUB_WORKSPACE}/out"
+                        zip -q -r $zip_args "../Library-osx.zip" .
                     )
                 else
                     echo "ERROR: No supported zip tool!"
@@ -158,8 +199,8 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       shell: pwsh
       run: |
-        Copy-Item "src\*.conf" "out\"
-        Copy-Item "ConfigGenerator\out\*" "out\"
+        Copy-Item "src\config.conf" "out"
+        Copy-Item "ConfigGenerator\out\*" "out"
         # By default use fastest compression
         $compressionArgs = '-mx=1'
 
@@ -206,13 +247,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3.0.0
 
-    - name: Download Library-osx-x64 artifact from macos-latest
+    - name: Download Library-osx artifact from macos-latest
       uses: actions/download-artifact@v3.0.0
       with:
         name: macos-latest_Library-osx
         path: out
 
-    - name: Download Library-win-x64 artifact from windows-latest
+    - name: Download Library-win artifact from windows-latest
       uses: actions/download-artifact@v3.0.0
       with:
         name: windows-latest_Library-win
