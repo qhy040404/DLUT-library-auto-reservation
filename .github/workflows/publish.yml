@@ -32,9 +32,17 @@ jobs:
     - name: Verify .NET Core
       run: dotnet --info
 
-    - name: Verify Python and pip packages
+    - name: Verify Python and pip packages (win&linux)
+      if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'ubuntu-')
       run: |
         python --version
+        pip install requests
+        pip install pyinstaller
+    
+    - name: Verify Python and pip packages (mac)
+      if: startsWith(matrix.os, 'macos-')
+      run: |
+        python3 --version
         pip install requests
         pip install pyinstaller
     
