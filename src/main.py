@@ -37,7 +37,7 @@ while configData:
     area_name = data[2]
     room_name = data[3]
     area_id = area_map.get(area_name)
-    room_id = temp_map.get(room_name).get(area_id)
+    room_id = room_map.get(area_id).get(room_name)
 
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
