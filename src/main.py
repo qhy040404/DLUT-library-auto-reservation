@@ -18,7 +18,7 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 
 # Read config
 
-with open("config.conf","r") as config:
+with open("config.conf","r",encoding='cp936') as config:
     configData = config.readlines()
     configData.pop(0)
     if len(configData) == 1:

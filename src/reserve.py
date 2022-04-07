@@ -66,7 +66,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                 print('Seat setted.')
                 break
             elif seat_type == 2 or seat_type == 3:
-                print(seat_label_num + 'Seat unavailable.(Type)')
+                print(seat_label_num + ' Seat unavailable.(Type)')
                 break
             else:
                 print('Not a seat. Switching...')
@@ -82,7 +82,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                     print('Seat setted.')
                     break
                 elif seat_type == 2 or seat_type == 3:
-                    print(seat_label_num + 'Seat unavailable.(Type)')
+                    print(seat_label_num + ' Seat unavailable.(Type)')
                     break
                 else:
                     print('Not a seat. Switching...')
