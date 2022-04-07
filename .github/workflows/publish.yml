@@ -252,16 +252,10 @@ jobs:
         name: windows-latest_Library-win
         path: upload
 
-    - name: Import GPG key for signing
-      uses: crazy-max/ghaction-import-gpg@v4.3.0
-      with:
-        gpg_private_key: ${{ secrets.GPG_KEY }}
-
     - name: Generate SHA-512 checksums
       shell: sh
       run: |
         set -eu
-
         (
             cd "upload"
 
@@ -323,14 +317,4 @@ jobs:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
         asset_path: upload/SHA512SUMS
         asset_name: SHA512SUMS
-        asset_content_type: text/plain
-
-    - name: Upload SHA512SUMS.sign to GitHub release
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: upload/SHA512SUMS.sign
-        asset_name: SHA512SUMS.sign
         asset_content_type: text/plain
