@@ -55,7 +55,7 @@ jobs:
         $ProgressPreference = 'SilentlyContinue'
         
         cd ConfigGenerator
-        msbuild -t:Build -p:Configuration=$env.CONFIGURATION -p:OutDir="out\" -nologo
+        msbuild -t:Build -p:Configuration=Release -p:OutDir="out\" -nologo
     
     - name: Publish main on Unix
       if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
