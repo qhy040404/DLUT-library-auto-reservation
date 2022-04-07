@@ -8,7 +8,7 @@
     ":automergeMinor",
     ":disableDependencyDashboard",
     ":disableRateLimiting",
-	":label(🤖 Automatic)"
+    ":label(🤖 Automatic)"
   ],
   "git-submodules": {
     "enabled": true
