@@ -4,8 +4,15 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 #Set by qhy040404
-example.txt
+test.py
+my.py
+exe/
+output/
+updatelog.txt
+future.txt
+backup/
 /config.conf
+/src/logo.ico
 
 # User-specific files
 *.rsuser

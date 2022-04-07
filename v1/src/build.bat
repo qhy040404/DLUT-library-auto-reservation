@@ -1,0 +1,1 @@
+pyinstaller -w -i logo.ico --version-file version main.py

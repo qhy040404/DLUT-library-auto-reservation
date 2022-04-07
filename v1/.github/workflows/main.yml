@@ -1,0 +1,29 @@
+name: Compile-CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update system dependence
+        run: |
+          sudo apt update
+          sudo apt install -y python python3 pip
+
+      - name: Install selenium
+        run: sudo pip install selenium pyinstaller
+
+      - name: Compile
+        run: |
+            cd src
+            pyinstaller main.py

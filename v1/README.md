@@ -7,21 +7,26 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/qhy040404/DLUT-library-auto-reservation)
 
-# 2nd Generation
-- 重写了整体架构
-- 弃用selenium提供的webdriver方式，改用requests，大大减少了预约所需的时间
-- 登录模块使用了[BeautyYuYanli/DLUT-login](https://github.com/BeautyYuYanli/DLUT-login)
+框架来自于[ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
 
 ## 特性
-- 命令行界面回归，可以查看log
-- 可通过邮件推送预约结果，以及预约失败原因（[错误码](ERRORCODE)）
+- 预约成功后无弹窗，以防止程序在弹窗后等待点击而持续运行
+- 可以通过邮件推送预约结果
+
+## 做出的修改
+- 去掉了页面的滑动，当前可以精确定位一个座位（代码量直接大幅下降doge）
 
 ## 依赖项
-- [Python](https://www.python.org/downloads/) 
-- requests （推荐使用[pip](https://pip.pypa.io/en/stable/installation/)）
-  - ```pip install -U requests``` (For Linux)
-  - ```py -m pip install -U requests``` (For Windows)
-- 不下依赖包用个der啊
+- 直接运行源程序请完整安装下述依赖包
+  - [Chromedriver](https://chromedriver.chromium.org/downloads) 记得下载对应版本，解压到```/driver```文件夹里
+  - [Python](https://www.python.org/downloads/) 
+  - selenium （推荐使用[pip](https://pip.pypa.io/en/stable/installation/)）
+    - ```pip install -U selenium``` (For Linux)
+    - ```py -m pip install -U selenium``` (For Windows)
+  - 不下依赖包用个der啊
+- 如果使用打包后版本，请确认Chromedriver与电脑上的Chrome版本相对应
+  - 编译进安装包内的Chromedriver对应Chrome99，如版本不同请到[此处](https://chromedriver.chromium.org/downloads)自行下载对应版本
+  - 或者下载最新版[Chrome](https://www.google.cn/chrome)
 
 ## 使用
 - 直接运行源程序
@@ -34,5 +39,4 @@
 
 ## 链接
 - [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
-- [BeautyYuYanli/DLUT-login](https://github.com/BeautyYuYanli/DLUT-login)
 - [配置生成器](https://github.com/qhy040404/Library-reservation-configGenerator)

@@ -4,7 +4,6 @@
 import reserve
 import smtplib
 from email.mime.text import MIMEText
-import os
 
 # initialize map
 area_map = {'伯川': '17', '令希': '32'}
@@ -21,8 +20,8 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
-        print('配置文件无数据，正在打开配置生成器...')
-        os.system('timeout 1 >nul && start ConfigGenerator.exe')
+        print('请先按照example.conf生成配置文件')
+        input('输入回车退出')
         exit()
 
 while configData:

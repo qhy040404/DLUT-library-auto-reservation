@@ -1,0 +1,16 @@
+name: Auto-assign
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add assignees
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-assignees'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          assignees: 'qhy040404'
