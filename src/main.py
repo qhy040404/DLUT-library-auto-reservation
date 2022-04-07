@@ -31,18 +31,13 @@ while configData:
     data = configData.pop(0)
     data = data.strip('\n')
     data = data.split()
-    print(data)
 
     user_id = data[0]
     password = data[1]
     area_name = data[2]
     room_name = data[3]
     area_id = area_map.get(area_name)
-    print(area_id)
-    temp_map = room_map.get(area_id)
-    print(temp_map)
-    room_id = temp_map.get(room_name)
-    print(room_id)
+    room_id = temp_map.get(room_name).get(area_id)
 
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
