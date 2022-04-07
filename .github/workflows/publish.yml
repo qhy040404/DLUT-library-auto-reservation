@@ -1,0 +1,303 @@
+name: Publish
+
+on: [push, pull_request]
+
+env:
+  CONFIGURATION: Release
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SDK_VERSION: 6.0.x
+  NET_CORE_VERSION: net6.0
+
+jobs:
+  publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3.0.0
+      with:
+        submodules: recursive
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2.0.0
+      with:
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+    - name: Verify .NET Core
+      run: dotnet --info
+
+    - name: Verify Python and pip packages
+      run: |
+        py --version
+        pip install requests
+        pip install pyinstaller
+    
+    - name: Restore packages in preparation for ConfigGenerator publishing (win)
+      if: startsWith(matrix.os, 'windows-')
+      run: |
+        cd ConfigGenerator
+        dotnet restore ConfigGenerator -p:ContinuousIntegrationBuild=true --nologo
+
+    - name: Publish ConfigGenerator on Windows
+      if: startsWith(matrix.os, 'windows-')
+      shell: pwsh
+      run: |
+        Set-StrictMode -Version Latest
+        $ErrorActionPreference = 'Stop'
+        $ProgressPreference = 'SilentlyContinue'
+        cd ConfigGenerator
+
+        $PublishBlock = {
+            param()
+
+            Set-StrictMode -Version Latest
+            $ErrorActionPreference = 'Stop'
+            $ProgressPreference = 'SilentlyContinue'
+
+            Set-Location "$env:GITHUB_WORKSPACE"
+
+            $targetFramework = $env:NET_CORE_VERSION
+
+            dotnet publish ConfigGenerator -c "$env:CONFIGURATION" -f "$targetFramework" -o "out\" -p:ContinuousIntegrationBuild=true --no-restore --nologo 
+
+            if ($LastExitCode -ne 0) {
+                throw "Last command failed."
+            }
+
+            # Icon is available only in .NET Framework and .NET Core Windows build, we'll bundle the .ico file for other flavours
+            if (($targetFramework -eq "$env:NET_CORE_VERSION") -and !(Test-Path "out\ConfigGenerator.exe" -PathType Leaf)) {
+                Copy-Item 'icon\icon.ico' "out\icon.ico"
+            }
+        }
+    
+    - name: Publish main on Unix
+      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
+      env: 
+        VARIANTS: linux osx
+      shell: sh
+      run: |
+        cd src
+        pyinstaller -i logo.ico -F --version-file version main.py
+        cd ..
+        cp -pR "src/dist/*" "out/"
+    
+    - name: Publish main on Windows
+      if: startsWith(matrix.os, 'windows-')
+      run: |
+        Set-StrictMode -Version Latest
+        cd src
+        pyinstaller -i logo.ico -F --version-file version main.py
+        cd ..
+        Copy-Item "src\dist\*" "out\" -Recurse
+    
+    - name: Create zip file on Unix
+      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
+      env: 
+        VARIANTS: linux osx
+      shell: sh
+      run: |
+        cp "src/*.conf" "out/"
+        
+        # By default use fastest compression
+        seven_zip_args="-mx=1"
+        zip_args="-1"
+
+        # Include extra logic for builds marked for release
+        case "$GITHUB_REF" in
+            "refs/tags/"*)
+                # Tweak compression args for release publishing
+                seven_zip_args="-mx=9 -mfb=258 -mpass=15"
+                zip_args="-9"
+        esac
+        
+        case "$(uname -s)" in
+            "Darwin")
+                # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
+                if command -v zip >/dev/null; then
+                    (
+                        cd "${GITHUB_WORKSPACE}/out/${1}"
+                        zip -q -r $zip_args "../Library-${1}.zip" .
+                    )
+                elif command -v 7z >/dev/null; then
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-${1}.zip" "${GITHUB_WORKSPACE}/out/${1}/*"
+                else
+                    echo "ERROR: No supported zip tool!"
+                    return 1
+                fi
+                ;;
+            *)
+                if command -v 7z >/dev/null; then
+                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-${1}.zip" "${GITHUB_WORKSPACE}/out/${1}/*"
+                elif command -v zip >/dev/null; then
+                    (
+                        cd "${GITHUB_WORKSPACE}/out/${1}"
+                        zip -q -r $zip_args "../Library-${1}.zip" .
+                    )
+                else
+                    echo "ERROR: No supported zip tool!"
+                    return 1
+                fi
+                ;;
+        esac
+
+      
+    - name: Create zip file on Windows
+      if: startsWith(matrix.os, 'windows-')
+      shell: pwsh
+      run: |
+        Copy-Item "src\*.conf" "out\"
+        Copy-Item "ConfigGenerator\out\*" "out\"
+        # By default use fastest compression
+        $compressionArgs = '-mx=1'
+
+        # Include extra logic for builds marked for release
+        if ($env:GITHUB_REF -like 'refs/tags/*') {
+            # Tweak compression args for release publishing
+            $compressionArgs = '-mx=9', '-mfb=258', '-mpass=15'
+        }
+
+        7z a -bd -slp -tzip -mm=Deflate $compressionArgs "out\Library-win.zip" "$env:GITHUB_WORKSPACE\out\*"
+
+        if ($LastExitCode -ne 0) {
+            throw "Last command failed."
+        }
+    
+
+    - name: Upload Library-linux
+      continue-on-error: true
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: ${{ matrix.os }}_ASF-linux
+        path: out/Library-linux.zip
+
+    - name: Upload Library-osx
+      continue-on-error: true
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: ${{ matrix.os }}_ASF-osx
+        path: out/Library-osx.zip
+
+    - name: Upload Library-win
+      continue-on-error: true
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: ${{ matrix.os }}_ASF-win
+        path: out/Library-win.zip
+
+  release:
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+    needs: publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3.0.0
+
+    - name: Download Library-osx-x64 artifact from macos-latest
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: macos-latest_Library-osx
+        path: out
+
+    - name: Download Library-win-x64 artifact from windows-latest
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: windows-latest_Library-win
+        path: out
+
+    - name: Import GPG key for signing
+      uses: crazy-max/ghaction-import-gpg@v4.3.0
+      with:
+        gpg_private_key: ${{ secrets.GPG_KEY }}
+
+    - name: Generate SHA-512 checksums and signature
+      shell: sh
+      run: |
+        set -eu
+
+        (
+            cd "out"
+
+            sha512sum *.zip > SHA512SUMS
+            gpg -a -b -o SHA512SUMS.sign SHA512SUMS
+        )
+
+    - name: Upload SHA512SUMS
+      continue-on-error: true
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: SHA512SUMS
+        path: out/SHA512SUMS
+
+    - name: Upload SHA512SUMS.sign
+      continue-on-error: true
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: SHA512SUMS.sign
+        path: out/SHA512SUMS.sign
+
+    - name: Create Library GitHub release
+      id: github_release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GPG_KEY }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: v${{ github.ref }}
+        prerelease: true
+
+    - name: Upload Library-linux to GitHub release
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.github_release.outputs.upload_url }}
+        asset_path: out/Library-linux.zip
+        asset_name: Library-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Library-osx to GitHub release
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.github_release.outputs.upload_url }}
+        asset_path: out/Library-osx.zip
+        asset_name: Library-osx.zip
+        asset_content_type: application/zip
+
+    - name: Upload Library-win to GitHub release
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.github_release.outputs.upload_url }}
+        asset_path: out/Library-win.zip
+        asset_name: Library-win.zip
+        asset_content_type: application/zip
+
+    - name: Upload SHA512SUMS to GitHub release
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.github_release.outputs.upload_url }}
+        asset_path: out/SHA512SUMS
+        asset_name: SHA512SUMS
+        asset_content_type: text/plain
+
+    - name: Upload SHA512SUMS.sign to GitHub release
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.github_release.outputs.upload_url }}
+        asset_path: out/SHA512SUMS.sign
+        asset_name: SHA512SUMS.sign
+        asset_content_type: text/plain
