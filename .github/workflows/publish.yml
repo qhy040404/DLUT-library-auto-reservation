@@ -55,25 +55,7 @@ jobs:
         $ProgressPreference = 'SilentlyContinue'
         
         cd ConfigGenerator
-
-        $PublishBlock = {
-            param()
-
-            Set-StrictMode -Version Latest
-            $ErrorActionPreference = 'Stop'
-            $ProgressPreference = 'SilentlyContinue'
-
-            Set-Location "$env:GITHUB_WORKSPACE"
-
-            $targetFramework = $env:NET_CORE_VERSION
-            $variantArgs = '-p:PublishSingleFile=true', '-p:PublishTrimmed=true', '-r', "$variant", '--self-contained'
-
-            msbuild -t:Build -p:Configuration=$env.CONFIGURATION -p:OutDir="out\" -nologo
-
-            if ($LastExitCode -ne 0) {
-                throw "Last command failed."
-            }
-        }
+        msbuild -t:Build -p:Configuration=$env.CONFIGURATION -p:OutDir="out\" -nologo
     
     - name: Publish main on Unix
       if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
