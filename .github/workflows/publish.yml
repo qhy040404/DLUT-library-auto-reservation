@@ -279,7 +279,7 @@ jobs:
       id: github_release
       uses: actions/create-release@v1.1.4
       env:
-        GITHUB_TOKEN: ${{ secrets.GPG_KEY }}
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: v${{ github.ref }}
