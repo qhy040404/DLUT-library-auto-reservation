@@ -1,4 +1,4 @@
-# coding=gbk
+# coding=utf-8
 
 # import
 import sso
@@ -32,28 +32,28 @@ def constructParaForAddSeat(addCode):
     return '&'.join([i+'='+j for i, j in al.items()])
 
 def Reserve(user_id, password, wanted_seats, room_id):
-    # Ö´ĞĞ×´Ì¬¶¨Òå
+    # æ‰§è¡ŒçŠ¶æ€å®šä¹‰
     nice = False
 
-    # µÇÂ¼²¢¼ì²éµÇÂ¼×´Ì¬
+    # ç™»å½•å¹¶æ£€æŸ¥ç™»å½•çŠ¶æ€
     online = False
     while online is not True:
         s = sso.login(id=user_id, passwd=password)
         ifLogin = s.get(session_stat).text
-        if 'ÓÃ»§ÔÚÏß' in ifLogin:
+        if 'ç”¨æˆ·åœ¨çº¿' in ifLogin:
             online = True
         else:
             print('Login error.')
             del s
 
-    # »ñÈ¡×ùÎ»×´Ì¬
+    # è·å–åº§ä½çŠ¶æ€
     room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
     room_available_map = room_available_map.strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')
     room_available_map = room_available_map.split('},{')
     room_available_map = (',').join(room_available_map)
     room_available_map = room_available_map.split(',')
 
-    # ²é¿´×ùÎ»ÊÇ·ñ¿ÉÓÃ£¬»ñÈ¡seat_id
+    # æŸ¥çœ‹åº§ä½æ˜¯å¦å¯ç”¨ï¼Œè·å–seat_id
     isASeat = False
     if type(wanted_seats) == str:
         seat_label_num = wanted_seats
@@ -100,25 +100,25 @@ def Reserve(user_id, password, wanted_seats, room_id):
         return None, nice, 'Status Error.'
     seat_id = room_available_map[j - 1].strip('"seat_id":""')
 
-    # ¼ì²éÊÇ·ñÈÔÈ»ÔÚÏß
+    # æ£€æŸ¥æ˜¯å¦ä»ç„¶åœ¨çº¿
     checkSession = s.get(session_stat).text
-    if 'ÓÃ»§ÔÚÏß' in checkSession:
+    if 'ç”¨æˆ·åœ¨çº¿' in checkSession:
         pass
     else:
         print('Logged out. Sending login request.')
         del s
         s = sso.login(id=user_id, passwd=password)
 
-    # ÌáÈ¡addCode
+    # æå–addCode
     addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
     addCode = addCode.split(',')
     addCode = addCode.pop()
     addCode = addCode.lstrip('"addCode":"')
     addCode = addCode.rstrip('"}}\r\n\r\n\r\n\r\n')
 
-    # Ìá½»Ô¤Ô¼post
+    # æäº¤é¢„çº¦post
     reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
-    if 'Ô¤Ô¼³É¹¦' in reserve_response:
+    if 'é¢„çº¦æˆåŠŸ' in reserve_response:
         print('Success.')
         nice = True
         error = None
@@ -126,6 +126,6 @@ def Reserve(user_id, password, wanted_seats, room_id):
         print('Last Step Error.')
         error = reserve_response
 
-    # µÇ³ö
+    # ç™»å‡º
     s.get(logout_url)
     return seat_label_num, nice, error

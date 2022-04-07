@@ -1,4 +1,4 @@
-# coding=gbk
+# coding=utf-8
 
 # import
 import reserve
@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 import os
 
 # initialize map
-area_map = {'²®´¨': '17', 'ÁîÏ£': '32'}
+area_map = {'ä¼¯å·': '17', 'ä»¤å¸Œ': '32'}
 room_map = {'17': {'301': '168', '312': '170', '401': '195',\
                    '404': '197', '409': '196', '501': '198',\
                    '504': '199', '507': '200'},\
@@ -21,7 +21,7 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
-        print('ÅäÖÃÎÄ¼şÎŞÊı¾İ£¬ÕıÔÚ´ò¿ªÅäÖÃÉú³ÉÆ÷...')
+        print('é…ç½®æ–‡ä»¶æ— æ•°æ®ï¼Œæ­£åœ¨æ‰“å¼€é…ç½®ç”Ÿæˆå™¨...')
         os.system('timeout 1 >nul && start ConfigGenerator.exe')
         exit()
 
@@ -42,7 +42,7 @@ while configData:
     seatData = seatData.strip('\n')
     wanted_seats = seatData.split("-")
 
-    # ÓÊ¼ş¹¦ÄÜ
+    # é‚®ä»¶åŠŸèƒ½
     def send_email(seat = None, success = False, error = None):
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')
@@ -59,12 +59,12 @@ while configData:
         print("Sending email...")
 
         if success:
-            context = '³É¹¦£¬×ùÎ»Î»ÓÚ' + area_name + 'µÄ' + room_name + 'ÔÄÀÀÊÒµÄ' + seat + '×ù'
+            context = 'æˆåŠŸï¼Œåº§ä½ä½äº' + area_name + 'çš„' + room_name + 'é˜…è§ˆå®¤çš„' + seat + 'åº§'
         else:
-            context = 'Ã»Ô¼µ½£¬Ã÷¶ùÔÙÊÔÊÔ°É.' + error
+            context = 'æ²¡çº¦åˆ°ï¼Œæ˜å„¿å†è¯•è¯•å§.' + error
 
         message = MIMEText(context,'plain','utf-8')
-        message['Subject'] = '×ùÎ»Ô¤¶¨'
+        message['Subject'] = 'åº§ä½é¢„å®š'
         message['From'] = sender
         message['To'] = receiver
 

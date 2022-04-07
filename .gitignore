@@ -6,6 +6,8 @@
 #Set by qhy040404
 example.txt
 /config.conf
+/temp
+/exe
 
 # User-specific files
 *.rsuser
