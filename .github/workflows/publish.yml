@@ -108,7 +108,8 @@ jobs:
         VARIANTS: linux osx
       shell: sh
       run: |
-        cp "src/*.conf" "out/"
+        cp "src/config.conf" "out/"
+        cp "src/example.conf" "out/"
         
         # By default use fastest compression
         seven_zip_args="-mx=1"
