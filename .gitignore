@@ -370,3 +370,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /src/dist
+/src/main.spec
+/src/build/main
