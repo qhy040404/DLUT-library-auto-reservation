@@ -72,7 +72,6 @@ jobs:
       shell: sh
       run: |
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
-#        cp -pR "src/dist/*" "/out/"
     
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')
