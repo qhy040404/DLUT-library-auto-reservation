@@ -91,7 +91,7 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       run: |
         Set-StrictMode -Version Latest
-        New-Item -Path ${GITHUB_WORKSPACE} -Name out -type "directory"
+        New-Item -Name out -type "directory"
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
         Copy-Item "src\dist\*" "out" -Recurse
     
@@ -193,6 +193,7 @@ jobs:
                 ;;
         esac
 
+        ls
       
     - name: Create zip file on Windows
       if: startsWith(matrix.os, 'windows-')
