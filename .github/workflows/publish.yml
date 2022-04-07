@@ -221,21 +221,21 @@ jobs:
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
-        name: ${{ matrix.os }}_ASF-linux
+        name: ${{ matrix.os }}_Library-linux
         path: out/Library-linux.zip
 
     - name: Upload Library-osx
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
-        name: ${{ matrix.os }}_ASF-osx
+        name: ${{ matrix.os }}_Library-osx
         path: out/Library-osx.zip
 
     - name: Upload Library-win
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
-        name: ${{ matrix.os }}_ASF-win
+        name: ${{ matrix.os }}_Library-win
         path: out/Library-win.zip
 
   release:
