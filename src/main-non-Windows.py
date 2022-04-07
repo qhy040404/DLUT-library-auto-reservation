@@ -6,7 +6,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 # initialize map
-area_map = {'伯川': '17', '令希': '32'}
+area_map = {'BC': '17', 'LX': '32'}
 room_map = {'17': {'301': '168', '312': '170', '401': '195',\
                    '404': '197', '409': '196', '501': '198',\
                    '504': '199', '507': '200'},\
@@ -39,9 +39,9 @@ while configData:
 
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
-    wanted_seats = seatData.split("-")
+    wanted_seats = seatData.split()
 
-    # 邮件功能
+    # function email
     def send_email(seat = None, success = False, error = None):
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')

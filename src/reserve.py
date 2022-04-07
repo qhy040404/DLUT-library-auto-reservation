@@ -32,28 +32,28 @@ def constructParaForAddSeat(addCode):
     return '&'.join([i+'='+j for i, j in al.items()])
 
 def Reserve(user_id, password, wanted_seats, room_id):
-    # 执行状态定义
+    # define result
     nice = False
 
-    # 登录并检查登录状态
+    # login and check session
     online = False
     while online is not True:
         s = sso.login(id=user_id, passwd=password)
         ifLogin = s.get(session_stat).text
-        if '用户在线' in ifLogin:
+        if 'user_id' in ifLogin:
             online = True
         else:
             print('Login error.')
             del s
 
-    # 获取座位状态
+    # get seats status
     room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
     room_available_map = room_available_map.strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')
     room_available_map = room_available_map.split('},{')
     room_available_map = (',').join(room_available_map)
     room_available_map = room_available_map.split(',')
 
-    # 查看座位是否可用，获取seat_id
+    # check if available, get seat_id
     isASeat = False
     if type(wanted_seats) == str:
         seat_label_num = wanted_seats
@@ -100,23 +100,23 @@ def Reserve(user_id, password, wanted_seats, room_id):
         return None, nice, 'Status Error.'
     seat_id = room_available_map[j - 1].strip('"seat_id":""')
 
-    # 检查是否仍然在线
+    # check session again
     checkSession = s.get(session_stat).text
-    if '用户在线' in checkSession:
+    if 'user_id' in checkSession:
         pass
     else:
         print('Logged out. Sending login request.')
         del s
         s = sso.login(id=user_id, passwd=password)
 
-    # 提取addCode
+    # get addCode
     addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
     addCode = addCode.split(',')
     addCode = addCode.pop()
     addCode = addCode.lstrip('"addCode":"')
     addCode = addCode.rstrip('"}}\r\n\r\n\r\n\r\n')
 
-    # 提交预约post
+    # submit reserve post
     reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
     if '预约成功' in reserve_response:
         print('Success.')
@@ -126,6 +126,6 @@ def Reserve(user_id, password, wanted_seats, room_id):
         print('Last Step Error.')
         error = reserve_response
 
-    # 登出
+    # logout
     s.get(logout_url)
     return seat_label_num, nice, error

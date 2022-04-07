@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 import os
 
 # initialize map
-area_map = {'伯川': '17', '令希': '32'}
+area_map = {'BC': '17', 'LX': '32'}
 room_map = {'17': {'301': '168', '312': '170', '401': '195',\
                    '404': '197', '409': '196', '501': '198',\
                    '504': '199', '507': '200'},\
@@ -18,7 +18,7 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 
 # Read config
 
-with open("config.conf","r",encoding='gb18030') as config:
+with open("config.conf","r") as config:
     configData = config.readlines()
     configData.pop(0)
     if len(configData) == 1:
@@ -31,19 +31,24 @@ while configData:
     data = configData.pop(0)
     data = data.strip('\n')
     data = data.split()
+    print(data)
 
     user_id = data[0]
     password = data[1]
     area_name = data[2]
     room_name = data[3]
     area_id = area_map.get(area_name)
-    room_id = room_map.get(area_id).get(room_name)
+    print(area_id)
+    temp_map = room_map.get(area_id)
+    print(temp_map)
+    room_id = temp_map.get(room_name)
+    print(room_id)
 
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
-    wanted_seats = seatData.split("-")
+    wanted_seats = seatData.split()
 
-    # 邮件功能
+    # function email
     def send_email(seat = None, success = False, error = None):
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')
