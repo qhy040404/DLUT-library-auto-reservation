@@ -34,7 +34,7 @@ jobs:
 
     - name: Verify Python and pip packages
       run: |
-        py --version
+        python --version
         pip install requests
         pip install pyinstaller
     
