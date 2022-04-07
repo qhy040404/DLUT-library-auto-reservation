@@ -94,7 +94,7 @@ jobs:
         cd src
         pyinstaller -i logo.ico -F --version-file version main.py
         cd ..
-        Copy-Item "src\dist\*" "out\" -Recurse
+        Copy-Item "src\dist\*" "out" -Recurse
     
     - name: Create zip file on Linux
       if: startsWith(matrix.os, 'ubuntu-')
