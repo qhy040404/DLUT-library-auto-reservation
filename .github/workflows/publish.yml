@@ -257,7 +257,7 @@ jobs:
       with:
         gpg_private_key: ${{ secrets.GPG_KEY }}
 
-    - name: Generate SHA-512 checksums and signature
+    - name: Generate SHA-512 checksums
       shell: sh
       run: |
         set -eu
@@ -266,7 +266,6 @@ jobs:
             cd "upload"
 
             sha512sum *.zip > SHA512SUMS
-            gpg -a -b -o SHA512SUMS.sign SHA512SUMS
         )
 
     - name: Upload SHA512SUMS
@@ -275,13 +274,6 @@ jobs:
       with:
         name: SHA512SUMS
         path: upload/SHA512SUMS
-
-    - name: Upload SHA512SUMS.sign
-      continue-on-error: true
-      uses: actions/upload-artifact@v3.0.0
-      with:
-        name: SHA512SUMS.sign
-        path: upload/SHA512SUMS.sign
 
     - name: Create Library GitHub release
       id: github_release
