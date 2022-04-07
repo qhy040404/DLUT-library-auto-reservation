@@ -83,9 +83,9 @@ jobs:
       shell: sh
       run: |
         cd src
-        pyinstaller -i logo.ico -F --version-file version main.py
+        pyinstaller -i logo.ico -F --version-file version main.py --distpath=./dist/
         cd ..
-        cp -pR "src/dist/*" "out/"
+        cp -pR "/src/dist/*" "/out/"
     
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')
