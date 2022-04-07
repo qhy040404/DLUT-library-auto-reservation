@@ -238,19 +238,19 @@ jobs:
       uses: actions/download-artifact@v3.0.0
       with:
         name: macos-latest_Library-osx
-        path: out
+        path: upload
 
     - name: Download Library-linux artifact from macos-latest
       uses: actions/download-artifact@v3.0.0
       with:
         name: ubuntu-latest_Library-linux
-        path: out
+        path: upload
 
     - name: Download Library-win artifact from windows-latest
       uses: actions/download-artifact@v3.0.0
       with:
         name: windows-latest_Library-win
-        path: out
+        path: upload
 
     - name: Import GPG key for signing
       uses: crazy-max/ghaction-import-gpg@v4.3.0
@@ -263,7 +263,7 @@ jobs:
         set -eu
 
         (
-            cd "out"
+            cd "upload"
 
             sha512sum *.zip > SHA512SUMS
             gpg -a -b -o SHA512SUMS.sign SHA512SUMS
@@ -274,14 +274,14 @@ jobs:
       uses: actions/upload-artifact@v3.0.0
       with:
         name: SHA512SUMS
-        path: out/SHA512SUMS
+        path: upload/SHA512SUMS
 
     - name: Upload SHA512SUMS.sign
       continue-on-error: true
       uses: actions/upload-artifact@v3.0.0
       with:
         name: SHA512SUMS.sign
-        path: out/SHA512SUMS.sign
+        path: upload/SHA512SUMS.sign
 
     - name: Create Library GitHub release
       id: github_release
@@ -299,7 +299,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: out/Library-linux.zip
+        asset_path: upload/Library-linux.zip
         asset_name: Library-linux.zip
         asset_content_type: application/zip
 
@@ -309,7 +309,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: out/Library-osx.zip
+        asset_path: upload/Library-osx.zip
         asset_name: Library-osx.zip
         asset_content_type: application/zip
 
@@ -319,7 +319,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: out/Library-win.zip
+        asset_path: upload/Library-win.zip
         asset_name: Library-win.zip
         asset_content_type: application/zip
 
@@ -329,7 +329,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: out/SHA512SUMS
+        asset_path: upload/SHA512SUMS
         asset_name: SHA512SUMS
         asset_content_type: text/plain
 
@@ -339,6 +339,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: out/SHA512SUMS.sign
+        asset_path: upload/SHA512SUMS.sign
         asset_name: SHA512SUMS.sign
         asset_content_type: text/plain
