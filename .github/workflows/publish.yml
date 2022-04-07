@@ -90,11 +90,8 @@ jobs:
         VARIANTS: linux osx
       shell: sh
       run: |
-        cd src
-        pyinstaller -i logo.ico -F --version-file version main.py --distpath=./dist/
-        ls
-        cd ..
-        cp -pR "/src/dist/*" "/out/"
+        pyinstaller -i src/logo.ico -F --version-file src/version main.py --distpath=out/
+#        cp -pR "src/dist/*" "/out/"
     
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')
