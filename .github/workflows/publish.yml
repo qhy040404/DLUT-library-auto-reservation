@@ -47,6 +47,7 @@ jobs:
         python3 -m pip install pyinstaller
     
     - name: Restore NuGet Packages
+      if: startsWith(matrix.os, 'windows-')
       shell: pwsh
       run: |
         Set-StrictMode -Version Latest
