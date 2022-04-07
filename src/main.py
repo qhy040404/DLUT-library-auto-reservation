@@ -20,6 +20,7 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 
 with open("config.conf","r") as config:
     configData = config.readlines()
+    configData.pop(0)
     if len(configData) == 1:
         print('配置文件无数据，正在打开配置生成器...')
         os.system('timeout 1 >nul && start ConfigGenerator.exe')
