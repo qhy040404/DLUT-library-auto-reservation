@@ -1,7 +1,7 @@
 {
   "extends": [
     "config:base",
-    ":assignee("qhy040404")"
+    ":assignee(qhy040404)",
     ":disableDependencyDashboard"
   ],
   "git-submodules": {
