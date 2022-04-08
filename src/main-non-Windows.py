@@ -1,6 +1,7 @@
 # coding=utf-8
 
 # import
+import sys
 import reserve
 import smtplib
 from email.mime.text import MIMEText
@@ -22,7 +23,7 @@ with open("config.conf","r") as config:
     if len(configData) == 1:
         print('请先按照example.conf生成配置文件')
         input('输入回车退出')
-        exit()
+        sys.exit()
 
 while configData:
     configData.pop(0)

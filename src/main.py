@@ -1,6 +1,7 @@
 # coding=utf-8
 
 # import
+import sys
 import reserve
 import smtplib
 from email.mime.text import MIMEText
@@ -24,7 +25,7 @@ with open("config.conf","r") as config:
     if len(configData) == 1:
         print('配置文件无数据，正在打开配置生成器...')
         os.system('timeout 1 >nul && start ConfigGenerator.exe')
-        exit()
+        sys.exit()
 
 while configData:
     configData.pop(0)

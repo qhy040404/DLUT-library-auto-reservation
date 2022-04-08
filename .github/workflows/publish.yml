@@ -72,8 +72,7 @@ jobs:
         VARIANTS: linux osx
       shell: sh
       run: |
-        pyinstaller -i src/logo.ico -F --version-file src/version src/main-non-Windows.py --distpath=out/
-        sudo chmod +rwx out/*
+        pyinstaller -F src/main-non-Windows.py --distpath=out/
 
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')

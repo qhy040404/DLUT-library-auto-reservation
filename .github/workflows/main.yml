@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Compile
-        uses: qhy040404/BuildMySource@v2-alpha3
+        uses: qhy040404/BuildMySource@v2
         with:
           language: python
           source: main-non-Windows
@@ -27,5 +27,4 @@ jobs:
           cd src
           cp "config.conf" "dist/"
           cd dist
-          sudo chmod +rwx ./main-non-Windows
           ./main-non-Windows
