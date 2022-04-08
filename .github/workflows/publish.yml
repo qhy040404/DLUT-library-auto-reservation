@@ -32,6 +32,16 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       run: msbuild -version
 
+    - name: Verify g++ on Linux
+      if: startsWith(matrix.os, 'ubuntu-')
+      shell: sh
+      run: g++ --version
+
+    - name: Verify g++ on macOS
+      if: startsWith(matrix.os, 'macos-')
+      shell: sh
+      run: g++-9 --version
+
     - name: Verify Python and pip packages (win&linux)
       if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'ubuntu-')
       run: |
@@ -54,6 +64,24 @@ jobs:
 
         cd ConfigGenerator
         nuget restore
+
+    - name: Publish ConfigGenerator on Linux
+      if: startsWith(matrix.os, 'ubuntu-')
+      shell: sh
+      run: |
+        cd ConfigGenerator
+        g++ -o ConfigGenerator Unix-version/src/source.cpp
+        mkdir out
+        cp "ConfigGenerator" "out/"
+
+    - name: Publish ConfigGenerator on macOS
+      if: startsWith(matrix.os, 'macos-')
+      shell: sh
+      run: |
+        cd ConfigGenerator
+        g++-9 -o ConfigGenerator Unix-version/src/source.cpp
+        mkdir out
+        cp "ConfigGenerator" "out/"
 
     - name: Publish ConfigGenerator on Windows
       if: startsWith(matrix.os, 'windows-')
@@ -86,7 +114,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
-        cp "src/example.conf" "out/"
+        cp "ConfigGenerator\out\*" "out/"
 
         # By default use fastest compression
         seven_zip_args="-mx=1"
@@ -135,7 +163,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
-        cp "src/example.conf" "out/"
+        cp "ConfigGenerator\out\*" "out/"
 
         # By default use fastest compression
         seven_zip_args="-mx=1"

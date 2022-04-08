@@ -6,6 +6,7 @@ import reserve
 import smtplib
 from email.mime.text import MIMEText
 import time
+import os
 
 # initialize map
 area_map = {'BC': '17', 'LX': '32'}
@@ -23,9 +24,8 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
 with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
-        print('请先按照example.conf生成配置文件')
-        print('配置文件请写入config.conf')
-        time.sleep(2)
+        print('配置文件无数据，正在打开配置生成器...')
+        os.system('sleep 1 && ./ConfigGenerator')
         sys.exit()
 
 while configData:
@@ -43,7 +43,7 @@ while configData:
 
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
-    wanted_seats = seatData.split()
+    wanted_seats = seatData.split('-')
 
     # function email
     def send_email(seat = None, success = False, error = None):
