@@ -27,5 +27,5 @@ jobs:
           cd src
           cp "config.conf" "dist/"
           cd dist
-          sudo chmod +777 ./main-non-Windows
+          sudo chmod +rwx ./main-non-Windows
           ./main-non-Windows
