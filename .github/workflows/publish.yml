@@ -38,20 +38,20 @@ jobs:
         python --version
         pip install requests
         pip install pyinstaller
-    
+
     - name: Verify Python and pip packages (mac)
       if: startsWith(matrix.os, 'macos-')
       run: |
         python3 --version
         python3 -m pip install requests
         python3 -m pip install pyinstaller
-    
+
     - name: Restore NuGet Packages
       if: startsWith(matrix.os, 'windows-')
       shell: pwsh
       run: |
         Set-StrictMode -Version Latest
-        
+
         cd ConfigGenerator
         nuget restore
 
@@ -62,32 +62,32 @@ jobs:
         Set-StrictMode -Version Latest
         $ErrorActionPreference = 'Stop'
         $ProgressPreference = 'SilentlyContinue'
-        
+
         cd ConfigGenerator
         msbuild -t:Build -p:Configuration=Release -p:OutDir="out\" -nologo
-    
+
     - name: Publish main on Unix
       if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
-      env: 
+      env:
         VARIANTS: linux osx
       shell: sh
       run: |
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
-    
+
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')
       run: |
         Set-StrictMode -Version Latest
         New-Item -Name out -type "directory"
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
-    
+
     - name: Create zip file on Linux
       if: startsWith(matrix.os, 'ubuntu-')
       shell: sh
       run: |
         cp "src/config.conf" "out/"
         cp "src/example.conf" "out/"
-        
+
         # By default use fastest compression
         seven_zip_args="-mx=1"
         zip_args="-1"
@@ -99,7 +99,7 @@ jobs:
                 seven_zip_args="-mx=9 -mfb=258 -mpass=15"
                 zip_args="-9"
         esac
-        
+
         case "$(uname -s)" in
             "Darwin")
                 # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
@@ -136,7 +136,7 @@ jobs:
       run: |
         cp "src/config.conf" "out/"
         cp "src/example.conf" "out/"
-        
+
         # By default use fastest compression
         seven_zip_args="-mx=1"
         zip_args="-1"
@@ -148,7 +148,7 @@ jobs:
                 seven_zip_args="-mx=9 -mfb=258 -mpass=15"
                 zip_args="-9"
         esac
-        
+
         case "$(uname -s)" in
             "Darwin")
                 # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
@@ -178,7 +178,7 @@ jobs:
                 fi
                 ;;
         esac
-      
+
     - name: Create zip file on Windows
       if: startsWith(matrix.os, 'windows-')
       shell: pwsh
@@ -199,7 +199,7 @@ jobs:
         if ($LastExitCode -ne 0) {
             throw "Last command failed."
         }
-    
+
 
     - name: Upload Library-linux
       if: startsWith(matrix.os, 'ubuntu-')
