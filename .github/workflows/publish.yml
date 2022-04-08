@@ -114,7 +114,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
-        cp "ConfigGenerator\out\*" "out/"
+        cp "ConfigGenerator/out/*" "out/"
 
         # By default use fastest compression
         seven_zip_args="-mx=1"
@@ -163,7 +163,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
-        cp "ConfigGenerator\out\*" "out/"
+        cp "ConfigGenerator/out/*" "out/"
 
         # By default use fastest compression
         seven_zip_args="-mx=1"
