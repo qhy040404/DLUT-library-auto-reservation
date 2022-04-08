@@ -23,7 +23,6 @@ with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
         print('请先按照example.conf生成配置文件')
-        print('输入回车退出')
         time.sleep(2)
         sys.exit()
 
