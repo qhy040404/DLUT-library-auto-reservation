@@ -5,6 +5,7 @@ import sys
 import reserve
 import smtplib
 from email.mime.text import MIMEText
+import time
 
 # initialize map
 area_map = {'BC': '17', 'LX': '32'}
@@ -22,7 +23,8 @@ with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
         print('请先按照example.conf生成配置文件')
-        input('输入回车退出')
+        print('输入回车退出')
+        time.sleep(2)
         sys.exit()
 
 while configData:
