@@ -2,6 +2,7 @@
   "extends": [
     "config:base",
     ":assignee(qhy040404)",
+    ":disableRateLimiting",
     ":disableDependencyDashboard"
   ],
   "git-submodules": {
