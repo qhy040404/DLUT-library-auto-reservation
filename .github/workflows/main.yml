@@ -28,4 +28,5 @@ jobs:
           ls
           cp "config.conf" "dist/"
           cd dist
-          ./main
+          ls
+          main
