@@ -25,6 +25,7 @@ jobs:
         shell: sh
         run: |
           cd src
+          ls
           cp "config.conf" "dist/"
           cd dist
           ./main
