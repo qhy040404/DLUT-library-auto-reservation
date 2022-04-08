@@ -1,4 +1,4 @@
-name: Compile-CI
+name: Compile-and-Test-CI
 
 on:
   push:
@@ -19,4 +19,11 @@ jobs:
         uses: qhy040404/BuildMySource@v2-alpha3
         with:
           language: python
-          source: main
+          source: main-non-Windows
+
+      - name: test
+        shell: sh
+        run: |
+          cp "config.conf" "dist/"
+          cd dist
+          ./main
