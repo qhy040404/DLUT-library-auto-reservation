@@ -73,7 +73,7 @@ jobs:
       shell: sh
       run: |
         pyinstaller -i src/logo.ico -F --version-file src/version src/main-non-Windows.py --distpath=out/
-        sudo chmod +x out/*
+        sudo chmod +777 out/*
 
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')
