@@ -27,4 +27,5 @@ jobs:
           cd src
           cp "config.conf" "dist/"
           cd dist
+          chmod +x ./main-non-Windows
           ./main-non-Windows
