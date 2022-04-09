@@ -8,6 +8,7 @@ example.txt
 /config.conf
 /release
 /exe
+backup
 
 # User-specific files
 *.rsuser
