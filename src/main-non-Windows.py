@@ -27,6 +27,7 @@ with open("config.conf","r") as config:
         print('配置文件无数据，正在打开配置生成器...')
         os.system('sleep 1 && ./ConfigGenerator')
         sys.exit()
+    configData.pop(0)
 
 while configData:
     configData.pop(0)
