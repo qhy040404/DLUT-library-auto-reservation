@@ -6,8 +6,19 @@ import reserve
 import smtplib
 from email.mime.text import MIMEText
 import os
+import platform
+import log
+
+# initialize log
+logger = log.initialLogger()
+
+# initialize
+logger.info('Welcome to DLUT-library-auto-reservation')
+logger.info(platform.platform() + ' ' + platform.machine())
+logger.info('Python version: ' + platform.python_version())
 
 # initialize map
+logger.info('Initializing maps')
 area_map = {'BC': '17', 'LX': '32'}
 room_map = {'17': {'301': '168', '312': '170', '401': '195',\
                    '404': '197', '409': '196', '501': '198',\
@@ -19,21 +30,28 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',\
            }
 
 # Read config
-
+logger.info('Importing data from config.conf')
 with open("config.conf","r") as config:
     configData = config.readlines()
     if len(configData) == 1:
+        logger.warning('No data detected in config.conf. Moving to ConfigGenerator.')
         print('配置文件无数据，正在打开配置生成器...')
-        os.system('timeout 1 >nul && start ConfigGenerator.exe')
+        if platform.system() == 'Windows':
+            os.system('timeout 1 >nul && start ConfigGenerator.exe')
+        elif platform.system() == 'Linux' or platform.system() == 'Darwin':
+            os.system('sleep 1 && ./ConfigGenerator')
+        logger.info('Exiting...')
         sys.exit()
     configData.pop(0)
 
 while configData:
+    logger.info('Spliting data')
     configData.pop(0)
     data = configData.pop(0)
     data = data.strip('\n')
     data = data.split()
 
+    logger.info('Processing basic data.')
     user_id = data[0]
     password = data[1]
     area_name = data[2]
@@ -41,12 +59,14 @@ while configData:
     area_id = area_map.get(area_name)
     room_id = room_map.get(area_id).get(room_name)
 
+    logger.info('Processing seat data.')
     seatData = configData.pop(0)
     seatData = seatData.strip('\n')
-    wanted_seats = seatData.split()
+    wanted_seats = seatData.split('-')
 
     # function email
     def send_email(seat = None, success = False, error = None):
+        logger.info('Processing mail data.')
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')
         mailData = mailData.split()
@@ -59,11 +79,14 @@ while configData:
         mail_host_pre = 'smtp.'
         mail_host = mail_host_pre + mail_temp_data[1]
 
-        print("Sending email...")
+        print('Sending email...')
+        logger.info('Sending email...')
 
         if success:
+            logger.info('Success = True')
             context = '成功，座位位于' + area_name + '的' + room_name + '阅览室的' + seat + '座'
         else:
+            logger.info('Success = False')
             context = '没约到，明儿再试试吧.' + error
 
         message = MIMEText(context,'plain','utf-8')
@@ -77,16 +100,26 @@ while configData:
             smtpObj.sendmail(sender, receiver, message.as_string())
             smtpObj.quit()
             print('Email succeed')
+            logger.info('Email succeed')
         except smtplib.SMTPException as e:
             print('Email error', e)
+            logger.error('Email error. ' + str(e))
 
     # main
     finalSeat, result, err = reserve.Reserve(user_id, password, wanted_seats, room_id)
+    logger.info('Detecting more data')
     if configData:
-            val = configData[0]
-            val_list = val.split()
-            if len(val_list) == 2:
-                if result is True:
-                    send_email(seat = finalSeat, success = result)
-                else:
-                    send_email(success = result, error = err)
+        logger.info('Detected. Detecting if maildata.')
+        val = configData[0]
+        val_list = val.split()
+        if len(val_list) == 2:
+            logger.info('maildata detected.')
+            if result is True:
+                send_email(seat = finalSeat, success = result)
+                configData.pop(0)
+            else:
+                send_email(success = result, error = err)
+                configData.pop(0)
+        else:
+            logger.info('Detected multi-person data. Returning...')
+            logger.info('')
