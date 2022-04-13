@@ -114,6 +114,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
+        cp "ERRORCODE.html" "out/"
         cp "ConfigGenerator/out/ConfigGenerator" "out/"
 
         # By default use fastest compression
@@ -163,6 +164,7 @@ jobs:
       shell: sh
       run: |
         cp "src/config.conf" "out/"
+        cp "ERRORCODE.html" "out/"
         cp "ConfigGenerator/out/ConfigGenerator" "out/"
 
         # By default use fastest compression
@@ -212,6 +214,7 @@ jobs:
       shell: pwsh
       run: |
         Copy-Item "src\config.conf" "out"
+        Copy-Item "ERRORCODE.html" "out"
         Copy-Item "ConfigGenerator\out\*" "out"
         # By default use fastest compression
         $compressionArgs = '-mx=1'
