@@ -24,14 +24,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="backup\main-non-Windows.py" />
     <Compile Include="src\main.py" />
     <Compile Include="src\reserve.py" />
     <Compile Include="src\sso\des.py" />
     <Compile Include="src\sso\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="backup\" />
     <Folder Include="res\" />
     <Folder Include="src\" />
     <Folder Include="src\sso\" />
