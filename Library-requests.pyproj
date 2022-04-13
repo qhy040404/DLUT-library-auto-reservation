@@ -24,9 +24,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="src\log.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="backup\main-non-Windows.py" />
     <Compile Include="src\main.py" />
     <Compile Include="src\reserve.py" />

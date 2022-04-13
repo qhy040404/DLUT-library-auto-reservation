@@ -1,3 +1,0 @@
-Type Error : 座位类型错误。 座位被禁用或座位被预约
-Status Error : 座位状态不可用。 座位不在可预约状态
-{"success":false,"message":"已经存在预约记录，不能重复预约！"} : 同message
