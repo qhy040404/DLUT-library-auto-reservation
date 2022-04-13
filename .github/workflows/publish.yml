@@ -268,7 +268,7 @@ jobs:
         name: macos-latest_Library-osx
         path: upload
 
-    - name: Download Library-linux artifact from macos-latest
+    - name: Download Library-linux artifact from ubuntu-latest
       uses: actions/download-artifact@v3.0.0
       with:
         name: ubuntu-latest_Library-linux
