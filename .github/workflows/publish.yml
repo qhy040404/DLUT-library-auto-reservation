@@ -100,7 +100,7 @@ jobs:
         VARIANTS: linux osx
       shell: sh
       run: |
-        pyinstaller -F src/main-non-Windows.py --distpath=out/
+        pyinstaller -F src/main.py --distpath=out/
 
     - name: Publish main on Windows
       if: startsWith(matrix.os, 'windows-')

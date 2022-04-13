@@ -19,7 +19,7 @@ jobs:
         uses: qhy040404/BuildMySource@v2
         with:
           language: python
-          source: main-non-Windows
+          source: main
 
       - name: test
         shell: sh
@@ -27,4 +27,4 @@ jobs:
           cd src
           cp "config.conf" "dist/"
           cd dist
-          ./main-non-Windows
+          ./main
