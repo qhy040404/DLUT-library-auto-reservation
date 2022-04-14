@@ -123,6 +123,8 @@ def Reserve(user_id, password, wanted_seats, room_id):
                     logging.warning('Seat invalid. Trying to remove invalid data and switch to a valid seat.')
                     print('Not a seat. Switching...')
                     room_available_map.remove(seat_label)
+            if isASeat is True:
+                break
 
     if isASeat is not True:
         logging.error('Seat unavailable or invalid. Check logs above.')
