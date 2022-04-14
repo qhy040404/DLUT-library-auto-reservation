@@ -3,11 +3,11 @@
 # import
 #import logging
 import sys
+import os
+import platform
 import reserve
 import smtplib
 from email.mime.text import MIMEText
-import os
-import platform
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation')
