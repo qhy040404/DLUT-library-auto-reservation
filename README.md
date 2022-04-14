@@ -29,7 +29,7 @@
   - 配置生成器可以到[这里](https://github.com/qhy040404/Library-reservation-configGenerator/releases)下载独立文件，拷贝至```.py```源文件目录运行
 - 运行打包后的程序
   - 在[Releases](https://github.com/qhy040404/DLUT-library-auto-reservation/releases)中下载最新版安装使用即可
-  - 桌面上会自动创建主程序和配置生成器的快捷方式
+  - Win/Mac/linux通用
 
 ## 链接
 - [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
