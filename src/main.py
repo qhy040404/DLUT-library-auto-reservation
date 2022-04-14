@@ -1,7 +1,7 @@
 # coding=utf-8
 
 # import
-#import logging
+import time
 import sys
 import os
 import platform
@@ -13,6 +13,10 @@ from email.mime.text import MIMEText
 reserve.logging.info('Welcome to DLUT-library-auto-reservation')
 reserve.logging.info(platform.platform() + ' ' + platform.machine())
 reserve.logging.info('Python version: ' + platform.python_version())
+
+# Wait for server
+time.sleep(3)
+reserve.logging.info('sleep 3s to avoid incorrect server time')
 
 # initialize map
 reserve.logging.info('Initializing maps')
