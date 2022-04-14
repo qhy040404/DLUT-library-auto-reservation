@@ -167,6 +167,7 @@ jobs:
       if: startsWith(matrix.os, 'macos-')
       shell: sh
       run: |
+        cp "Unix-version/res/com.qhy040404.library.plist" "out/"
         cp "src/config.conf" "out/"
         cp "ERRORCODE.html" "out/"
         cp "ConfigGenerator/out/ConfigGenerator" "out/"
