@@ -24,7 +24,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3.0.0
+      uses: actions/checkout@v3.0.1
       with:
         submodules: recursive
 
@@ -268,7 +268,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3.0.0
+      uses: actions/checkout@v3.0.1
 
     - name: Download Library-osx artifact from macos-latest
       uses: actions/download-artifact@v3.0.0
