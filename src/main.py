@@ -15,8 +15,8 @@ reserve.logging.info(platform.platform() + ' ' + platform.machine())
 reserve.logging.info('Python version: ' + platform.python_version())
 
 # Wait for server
-time.sleep(2.5)
-reserve.logging.info('sleep 2.5s to avoid incorrect server time')
+time.sleep(0.5)
+reserve.logging.info('sleep 0.5s to avoid incorrect server time')
 
 # initialize map
 reserve.logging.info('Initializing maps')
