@@ -34,5 +34,6 @@
 ## 链接
 - [ShuaichiLi/DLUT-library-auto-reservation](https://github.com/ShuaichiLi/DLUT-library-auto-reservation)
 - [BeautyYuYanli/DLUT-login](https://github.com/BeautyYuYanli/DLUT-login)
+- [Survival-Tools](https://github.com/BeautyYuYanli/dlut-survival-tools)
 - [配置生成器](https://github.com/qhy040404/Library-reservation-configGenerator)
 - [体育馆预约](https://github.com/qhy040404/DLUT-gym-auto-reservation)
