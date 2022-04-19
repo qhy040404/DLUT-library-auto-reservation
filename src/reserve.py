@@ -125,6 +125,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                         print('Not a seat. Switching...')
                         room_available_map.remove(seat_label)
                 if isASeat is True:
+                    currentNum = i
                     break
 
         if isASeat is not True:
@@ -179,7 +180,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
             if type(wanted_seats) == list:
                 logging.info('wanted_seats is a list.')
                 logging.info('Detecting if seats remains')
-                if i < len(wanted_seats):
+                if currentNum < len(wanted_seats):
                     logging.info('Wanted seats remains. Returning...')
                     seatsRemain = True
             else:
