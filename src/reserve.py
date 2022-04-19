@@ -68,7 +68,6 @@ def Reserve(user_id, password, wanted_seats, room_id):
                 print('Failed 3 times. Check your username and password. Exiting.')
                 logging.critical('Failed 3 times. Check your username and password. Exiting.')
 
-
     # get seats status
     logging.info('Getting seats status')
     room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
@@ -77,103 +76,116 @@ def Reserve(user_id, password, wanted_seats, room_id):
     room_available_map = (',').join(room_available_map)
     room_available_map = room_available_map.split(',')
 
-    # check if available, get seat_id
-    isASeat = False
-    if type(wanted_seats) == str:
-        logging.info('Data only includes 1 seat, mode 1')
-        seat_label_num = wanted_seats
-        seat_label = '"seat_label":"' + wanted_seats + '"'
-        logging.info('Seat label data is ' + seat_label)
-        while seat_label in room_available_map:
-            j = room_available_map.index(seat_label)
-            seat_type = int(room_available_map[j + 4].strip('"seat_type":"'))
-            logging.info('Seat type data is ' + str(seat_type))
-            if seat_type == 1:
-                isASeat = True
-                logging.info('Seat valid and setted')
-                print('Seat setted.')
-                break
-            elif seat_type == 2 or seat_type == 3:
-                logging.error('Seat is not available. Type: ' + str(seat_type) + ' Seat: ' + str(seat_label_num))
-                print(seat_label_num + ' Seat unavailable.(Type)')
-                break
-            else:
-                logging.warning('Seat invalid. Trying to remove invalid data and switch to a valid seat.')
-                print('Not a seat. Switching...')
-                room_available_map.remove(seat_label)
-    else:
-        logging.info('Data includes multiple seats, mode 2')
-        for i, seat_label_num in enumerate(wanted_seats):
-            seat_label = '"seat_label":"' + seat_label_num + '"'
-            logging.info('Current seat label: ' + seat_label)
+    seatsRemain = True
+    while seatsRemain is True:
+        # check if available, get seat_id
+        isASeat = False
+        if type(wanted_seats) == str:
+            logging.info('Data only includes 1 seat, mode 1')
+            seat_label_num = wanted_seats
+            seat_label = '"seat_label":"' + wanted_seats + '"'
+            logging.info('Seat label data is ' + seat_label)
             while seat_label in room_available_map:
                 j = room_available_map.index(seat_label)
                 seat_type = int(room_available_map[j + 4].strip('"seat_type":"'))
                 logging.info('Seat type data is ' + str(seat_type))
                 if seat_type == 1:
-                    logging.info('Seat valid and setted')
                     isASeat = True
+                    logging.info('Seat valid and setted')
                     print('Seat setted.')
                     break
                 elif seat_type == 2 or seat_type == 3:
-                    logging.error('Seat is not available. Type: ' + str(seat_type) + 'Seat: ' + str(seat_label_num))
+                    logging.error('Seat is not available. Type: ' + str(seat_type) + ' Seat: ' + str(seat_label_num))
                     print(seat_label_num + ' Seat unavailable.(Type)')
                     break
                 else:
-                    logging.warning('Seat invalid. Trying to remove invalid data and switch to a valid seat.')
+                    logging.warning('Seat invalid. Removing invalid data and switch to a valid seat.')
                     print('Not a seat. Switching...')
                     room_available_map.remove(seat_label)
-            if isASeat is True:
-                break
+        else:
+            logging.info('Data includes multiple seats, mode 2')
+            for i, seat_label_num in enumerate(wanted_seats):
+                seat_label = '"seat_label":"' + seat_label_num + '"'
+                logging.info('Current seat label: ' + seat_label)
+                while seat_label in room_available_map:
+                    j = room_available_map.index(seat_label)
+                    seat_type = int(room_available_map[j + 4].strip('"seat_type":"'))
+                    logging.info('Seat type data is ' + str(seat_type))
+                    if seat_type == 1:
+                        logging.info('Seat valid and setted')
+                        isASeat = True
+                        print('Seat setted.')
+                        break
+                    elif seat_type == 2 or seat_type == 3:
+                        logging.error('Seat is not available. Type: ' + str(seat_type) + 'Seat: ' + str(seat_label_num))
+                        print(seat_label_num + ' Seat unavailable.(Type)')
+                        break
+                    else:
+                        logging.warning('Seat invalid. Removing invalid data and switch to a valid seat.')
+                        print('Not a seat. Switching...')
+                        room_available_map.remove(seat_label)
+                if isASeat is True:
+                    currentNum = i
+                    break
 
-    if isASeat is not True:
-        logging.error('Seat unavailable or invalid. Check logs above.')
-        print('Failed. Seat unavailable.')
-        return None, nice, 'Type Error.'
+        if isASeat is not True:
+            logging.error('Seat unavailable or invalid. Check logs above.')
+            print('Failed. Seat unavailable.')
+            return None, nice, 'Type Error.'
 
-    status = int(room_available_map[j + 5].lstrip('"seat_order_status":'))
-    logging.info('Checking another data to confirm seat status.')
-    if status == 1:
-        logging.info('Success')
-    else:
-        logging.error('Failed. Status is ' + str(status))
-        print('Seat Unavailable.(status)')
-        return None, nice, 'Status Error.'
-    seat_id = room_available_map[j - 1].strip('"seat_id":""')
+        status = int(room_available_map[j + 5].lstrip('"seat_order_status":'))
+        logging.info('Checking another data to confirm seat status.')
+        if status == 1:
+            logging.info('Success')
+        else:
+            logging.error('Failed. Status is ' + str(status))
+            print('Seat Unavailable.(status)')
+            return None, nice, 'Status Error.'
+        seat_id = room_available_map[j - 1].strip('"seat_id":""')
 
-    # check session again
-    logging.info('Checking session again')
-    checkSession = s.get(session_stat).text
-    if 'user_id' in checkSession:
-        logging.info('Success')
-    else:
-        logging.warning('Failed. Re-logging in')
-        print('Logged out. Sending login request.')
-        del s
-        s = sso.login(id=user_id, passwd=password)
+        # check session again
+        logging.info('Checking session again')
+        checkSession = s.get(session_stat).text
+        if 'user_id' in checkSession:
+            logging.info('Success')
+        else:
+            logging.warning('Failed. Re-logging in')
+            print('Logged out. Sending login request.')
+            del s
+            s = sso.login(id=user_id, passwd=password)
 
-    # get addCode
-    logging.info('Processing addCode')
-    addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
-    addCode = addCode.split(',')
-    addCode = addCode.pop()
-    addCode = addCode.lstrip('"addCode":"')
-    addCode = addCode.rstrip('"}}\r\n\r\n\r\n\r\n')
-    logging.info('addCode is ' + addCode)
+        # get addCode
+        logging.info('Processing addCode')
+        addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
+        addCode = addCode.split(',')
+        addCode = addCode.pop()
+        addCode = addCode.lstrip('"addCode":"')
+        addCode = addCode.rstrip('"}}\r\n\r\n\r\n\r\n')
+        logging.info('addCode is ' + addCode)
 
-    # submit reserve post
-    logging.info('Reserving')
-    reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
-    if '预约成功' in reserve_response:
-        logging.info('Success')
-        print('Success.')
-        nice = True
-        error = None
-    else:
-        print('Last Step Error.')
-        error = reserve_response
-        logging.error('Failed. Error data is')
-        logging.error(error)
+        # submit reserve post
+        logging.info('Reserving')
+        reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
+        if '预约成功' in reserve_response:
+            logging.info('Success')
+            print('Success.')
+            nice = True
+            error = None
+        else:
+            print('Last Step Error.')
+            error = reserve_response
+            logging.error('Failed. Error data is')
+            logging.error(error)
+            logging.info('Detecting if wanted_seats is a list...')
+            if type(wanted_seats) == list:
+                logging.info('wanted_seats is a list.')
+                logging.info('Detecting if seats remains')
+                if currentNum < len(wanted_seats):
+                    logging.info('Wanted seats remains. Returning...')
+                    seatsRemain = True
+            else:
+                logging.warning('No more seats. Breaking out of loop...')
+                seatsRemain = False
 
     # logout
     logging.info('Logging out...')
