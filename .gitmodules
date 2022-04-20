@@ -1,3 +1,6 @@
 [submodule "ConfigGenerator"]
 	path = ConfigGenerator
 	url = https://github.com/qhy040404/Library-reservation-configGenerator.git
+[submodule "Updater"]
+	path = Updater
+	url = https://github.com/qhy040404/Library-reservation-updater.git
