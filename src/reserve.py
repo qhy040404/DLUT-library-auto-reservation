@@ -95,7 +95,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                     print('Seat setted.')
                     break
                 elif seat_type == 2 or seat_type == 3:
-                    logging.error('Seat is not available. Type: ' + str(seat_type) + ' Seat: ' + str(seat_label_num))
+                    logging.error('Seat is not available. Type: ' + str(seat_type) + '. Seat: ' + str(seat_label_num))
                     print(seat_label_num + ' Seat unavailable.(Type)')
                     break
                 else:
