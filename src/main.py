@@ -10,7 +10,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 # pre-define
-ver = '3.0.1.0'
+ver = '3.0.1.1'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
