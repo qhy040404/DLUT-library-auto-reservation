@@ -121,7 +121,6 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       run: |
         Set-StrictMode -Version Latest
-        New-Item -Name out -type "directory"
         pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
 
     - name: Create zip file on Linux
