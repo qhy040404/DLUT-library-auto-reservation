@@ -94,6 +94,21 @@ jobs:
         cd ConfigGenerator
         msbuild -t:Build -p:Configuration=Release -p:OutDir="out\" -nologo
 
+    - name: Publish Updater on Unix
+      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
+      env:
+        VARIANTS: linux osx
+      shell: sh
+      run: |
+        pyinstaller -F Updater/src/Updater.py --distpath=out/
+
+    - name: Publish Updater on Windows
+      if: startsWith(matrix.os, 'windows-')
+      run: |
+        Set-StrictMode -Version Latest
+        New-Item -Name out -type "directory"
+        pyinstaller -i Updater/src/logo.ico -F --version-file Updater/src/version Updater/src/Updater.py --distpath=out/
+
     - name: Publish main on Unix
       if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
       env:
@@ -113,6 +128,8 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu-')
       shell: sh
       run: |
+        cp "Updater/src/config.json" "out/"
+        cp "Updater/src/update.sh" "out/"
         cp "src/config.conf" "out/"
         cp "ERRORCODE.html" "out/"
         cp "ConfigGenerator/out/ConfigGenerator" "out/"
@@ -163,6 +180,8 @@ jobs:
       if: startsWith(matrix.os, 'macos-')
       shell: sh
       run: |
+        cp "Updater/src/config.json" "out/"
+        cp "Updater/src/update.sh" "out/"
         cp "ConfigGenerator/Unix-version/res/com.qhy040404.library.plist" "out/"
         cp "src/config.conf" "out/"
         cp "ERRORCODE.html" "out/"
@@ -214,6 +233,8 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
       shell: pwsh
       run: |
+        Copy-Item "Updater\src\config.json" "out"
+        Copy-Item "Updater\src\update.bat" "out"
         Copy-Item "src\config.conf" "out"
         Copy-Item "ERRORCODE.html" "out"
         Copy-Item "ConfigGenerator\out\*" "out"
