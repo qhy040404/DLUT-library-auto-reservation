@@ -36,4 +36,5 @@
 - [BeautyYuYanli/DLUT-login](https://github.com/BeautyYuYanli/DLUT-login)
 - [Survival-Tools](https://github.com/BeautyYuYanli/dlut-survival-tools)
 - [配置生成器](https://github.com/qhy040404/Library-reservation-configGenerator)
+- [Updater](https://github.com/qhy040404/Library-reservation-updater)
 - [体育馆预约](https://github.com/qhy040404/DLUT-gym-auto-reservation)
