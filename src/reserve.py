@@ -68,16 +68,15 @@ def Reserve(user_id, password, wanted_seats, room_id):
                 print('Failed 3 times. Check your username and password. Exiting.')
                 logging.critical('Failed 3 times. Check your username and password. Exiting.')
 
-    # get seats status
-    logging.info('Getting seats status')
-    room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
-    room_available_map = room_available_map.strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')
-    room_available_map = room_available_map.split('},{')
-    room_available_map = (',').join(room_available_map)
-    room_available_map = room_available_map.split(',')
+    while True:
+        # get seats status
+        logging.info('Getting seats status')
+        room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
+        room_available_map = room_available_map.strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')
+        room_available_map = room_available_map.split('},{')
+        room_available_map = (',').join(room_available_map)
+        room_available_map = room_available_map.split(',')
 
-    seatsRemain = True
-    while seatsRemain is True:
         # check if available, get seat_id
         isASeat = False
         if type(wanted_seats) == str:
@@ -125,7 +124,6 @@ def Reserve(user_id, password, wanted_seats, room_id):
                         print('Not a seat. Switching...')
                         room_available_map.remove(seat_label)
                 if isASeat is True:
-                    currentNum = i
                     break
 
         if isASeat is not True:
@@ -171,21 +169,14 @@ def Reserve(user_id, password, wanted_seats, room_id):
             print('Success.')
             nice = True
             error = None
+            break
         else:
             print('Last Step Error.')
             error = reserve_response
             logging.error('Failed. Error data is')
             logging.error(error)
             logging.info('Detecting if wanted_seats is a list...')
-            if type(wanted_seats) == list:
-                logging.info('wanted_seats is a list.')
-                logging.info('Detecting if seats remains')
-                if currentNum < len(wanted_seats):
-                    logging.info('Wanted seats remains. Returning...')
-                    seatsRemain = True
-            else:
-                logging.warning('No more seats. Breaking out of loop...')
-                seatsRemain = False
+            logging.info('Retrying...')
 
     # logout
     logging.info('Logging out...')
