@@ -24,6 +24,7 @@ reserve.logging.info('sleep 0.5s to avoid incorrect server time')
 # initialize map
 reserve.logging.info('Initializing maps')
 area_map = {'BC': '17', 'LX': '32'}
+area_map_chs = {'BC': '伯川', 'LX': '令希'}
 room_map = {'17': {'301': '168', '312': '170', '401': '195',\
                    '404': '197', '409': '196', '501': '198',\
                    '504': '199', '507': '200'},\
@@ -62,6 +63,7 @@ while configData:
     room_name = data[3]
     area_id = area_map.get(area_name)
     room_id = room_map.get(area_id).get(room_name)
+    area_name_chs = area_map_chs.get(area_name)
 
     reserve.logging.info('Processing seat data.')
     seatData = configData.pop(0)
@@ -88,7 +90,7 @@ while configData:
 
         if success:
             reserve.logging.info('Success = True')
-            context = '成功，座位位于' + area_name + '的' + room_name + '阅览室的' + seat + '座'
+            context = '成功，座位位于' + area_name_chs + '的' + room_name + '阅览室的' + seat + '座'
         else:
             reserve.logging.info('Success = False')
             context = '没约到，明儿再试试吧.' + error
