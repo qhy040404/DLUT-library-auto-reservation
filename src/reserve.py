@@ -18,10 +18,10 @@ room_available_map_url = ['http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRo
 get_addCode_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=seatChoose'
 addSeat_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=addSeatOrder'
 logout_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/loginOut.php'
-today = datetime.date.today()
+today = datetime.date.today() + datetime.timedelta(days=1)
 year = str(today.year)
 month = str(today.month)
-day = str(today.day + 1)
+day = str(today.day)
 order_date = year + '%2F' + month + '%2F' + day
 
 # function
