@@ -38,3 +38,5 @@
 - [配置生成器](https://github.com/qhy040404/Library-reservation-configGenerator)
 - [Updater](https://github.com/qhy040404/Library-reservation-updater)
 - [体育馆预约](https://github.com/qhy040404/DLUT-gym-auto-reservation)
+- [Library-One-Tap-Android(便于打开离退/暂离码的手机App)](https://github.com/qhy040404/Library-One-Tap-Android)
+- [Library-One-Tap-iOS(便于打开离退/暂离码的手机App)(开发中)](https://github.com/qhy040404/Library-One-Tap-iOS)
