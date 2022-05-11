@@ -1,9 +1,10 @@
 # coding=utf-8
 
 # import
-import sso
 import datetime
 import logging
+
+import sso
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,

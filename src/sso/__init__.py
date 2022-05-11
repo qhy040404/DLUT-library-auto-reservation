@@ -1,5 +1,6 @@
-from . import des
 import requests
+
+from . import des
 
 def initial(initUrl, id):
     s = requests.Session()
