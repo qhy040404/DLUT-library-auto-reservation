@@ -2,6 +2,7 @@ import requests
 
 from . import des
 
+
 def initial(initUrl, id):
     s = requests.Session()
     response = s.get(initUrl)
@@ -10,10 +11,11 @@ def initial(initUrl, id):
     s.cookies.set('cas_hash', "")
     return s, al
 
+
 def constructPara(id, passwd, lt):
     al = {
         'none': 'on',
-        'rsa': des.strEnc(id+passwd+lt, '1', '2', '3'),
+        'rsa': des.strEnc(id + passwd + lt, '1', '2', '3'),
         'ul': str(len(id)),
         'pl': str(len(passwd)),
         'sl': str(0),
@@ -21,7 +23,8 @@ def constructPara(id, passwd, lt):
         'execution': 'e1s1',
         '_eventId': 'submit',
     }
-    return '&'.join([i+'='+j for i, j in al.items()])
+    return '&'.join([i + '=' + j for i, j in al.items()])
+
 
 def login(id, passwd):
     targetUrl = 'https://sso.dlut.edu.cn/cas/login?service=http://seat.lib.dlut.edu.cn/yanxiujian/client/login.php?redirect=index.php'
@@ -33,5 +36,6 @@ def login(id, passwd):
     s.post(targetUrl, constructPara(id, passwd, lt), headers={'Content-Type': 'application/x-www-form-urlencoded'})
     return s
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     pass

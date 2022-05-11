@@ -15,15 +15,17 @@ logging.basicConfig(level=logging.INFO,
 # pre-define
 logging.info('Defining consts')
 session_stat = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=checkSession'
-room_available_map_url = ['http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=querySeatMap&order_date=', '&room_id=']
+room_available_map_url = [
+    'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=querySeatMap&order_date=', '&room_id=']
 get_addCode_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=seatChoose'
 addSeat_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/orderRoomAction.php?action=addSeatOrder'
 logout_url = 'http://seat.lib.dlut.edu.cn/yanxiujian/client/loginOut.php'
-tomorrow = datetime.date.today() + datetime.timedelta(days = 1)
+tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 year = str(tomorrow.year)
 month = str(tomorrow.month)
 day = str(tomorrow.day)
 order_date = year + '%2F' + month + '%2F' + day
+
 
 # function
 def constructParaForAddCode(seat_id, order_date):
@@ -32,7 +34,8 @@ def constructParaForAddCode(seat_id, order_date):
         'seat_id': seat_id,
         'order_date': order_date,
     }
-    return '&'.join([i+'='+j for i, j in al.items()])
+    return '&'.join([i + '=' + j for i, j in al.items()])
+
 
 def constructParaForAddSeat(addCode):
     logging.info('Preparing POST data for AddSeat')
@@ -40,7 +43,8 @@ def constructParaForAddSeat(addCode):
         'addCode': addCode,
         'method': 'addSeat',
     }
-    return '&'.join([i+'='+j for i, j in al.items()])
+    return '&'.join([i + '=' + j for i, j in al.items()])
+
 
 def Reserve(user_id, password, wanted_seats, room_id):
     logging.info('Arrived at reserve.py')
@@ -59,13 +63,13 @@ def Reserve(user_id, password, wanted_seats, room_id):
         ifLogin = s.get(session_stat).text
         if 'user_id' in ifLogin:
             online = True
-            logging.info('Session is ' + str(online))
+            logging.info('Session is \'' + str(online) + '\'')
         else:
             logCount = logCount + 1
             print('Login error.', logCount)
             logging.error('Login error. ' + str(logCount))
             del s
-            if logCount>=3:
+            if logCount >= 3:
                 print('Failed 3 times. Check your username and password. Exiting.')
                 logging.critical('Failed 3 times. Check your username and password. Exiting.')
 
@@ -117,7 +121,8 @@ def Reserve(user_id, password, wanted_seats, room_id):
                         print('Seat setted.')
                         break
                     elif seat_type == 2 or seat_type == 3:
-                        logging.error('Seat is not available. Type: ' + str(seat_type) + 'Seat: ' + str(seat_label_num))
+                        logging.error(
+                            'Seat is not available. Type: ' + str(seat_type) + ' Seat: ' + str(seat_label_num))
                         print(seat_label_num + ' Seat unavailable.(Type)')
                         break
                     else:
@@ -155,7 +160,8 @@ def Reserve(user_id, password, wanted_seats, room_id):
 
         # get addCode
         logging.info('Processing addCode')
-        addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
+        addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date),
+                         headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
         addCode = addCode.split(',')
         addCode = addCode.pop()
         addCode = addCode.lstrip('"addCode":"')
@@ -164,7 +170,8 @@ def Reserve(user_id, password, wanted_seats, room_id):
 
         # submit reserve post
         logging.info('Reserving')
-        reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode), headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
+        reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode),
+                                  headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
         if '预约成功' in reserve_response:
             logging.info('Success')
             print('Success.')

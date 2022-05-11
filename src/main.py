@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 import reserve
 
 # pre-define
-ver = '3.0.1.6'
+ver = '3.0.1.7'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
@@ -19,25 +19,25 @@ reserve.logging.info(platform.platform() + ' ' + platform.machine())
 reserve.logging.info('Python version: ' + platform.python_version())
 
 # Wait for server
+reserve.logging.info('Sleep 0.5s to avoid incorrect server time')
 time.sleep(0.5)
-reserve.logging.info('sleep 0.5s to avoid incorrect server time')
 
 # initialize map
 reserve.logging.info('Initializing maps')
 area_map = {'BC': '17', 'LX': '32'}
 area_map_chs = {'BC': '伯川', 'LX': '令希'}
-room_map = {'17': {'301': '168', '312': '170', '401': '195',\
-                   '404': '197', '409': '196', '501': '198',\
-                   '504': '199', '507': '200'},\
-            '32': {'301': '207', '302': '208', '401': '205',\
-                   '402': '206', '501': '203', '502': '204',\
-                   '601': '201', '602': '202', '201': '180',\
+room_map = {'17': {'301': '168', '312': '170', '401': '195', \
+                   '404': '197', '409': '196', '501': '198', \
+                   '504': '199', '507': '200'}, \
+            '32': {'301': '207', '302': '208', '401': '205', \
+                   '402': '206', '501': '203', '502': '204', \
+                   '601': '201', '602': '202', '201': '180', \
                    '202': '181'}
-           }
+            }
 
 # Read config
 reserve.logging.info('Importing data from config.conf')
-with open("config.conf","r") as config:
+with open("config.conf", "r") as config:
     configData = config.readlines()
     if len(configData) == 1:
         reserve.logging.warning('No data detected in config.conf. Moving to ConfigGenerator.')
@@ -51,7 +51,7 @@ with open("config.conf","r") as config:
     configData.pop(0)
 
 while configData:
-    reserve.logging.info('Spliting data')
+    reserve.logging.info('Splitting data')
     configData.pop(0)
     data = configData.pop(0)
     data = data.strip('\n')
@@ -71,8 +71,9 @@ while configData:
     seatData = seatData.strip('\n')
     wanted_seats = seatData.split('-')
 
+
     # function email
-    def send_email(seat = None, success = False, error = None):
+    def send_email(seat=None, success=False, error=None):
         reserve.logging.info('Processing mail data.')
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')
@@ -90,19 +91,19 @@ while configData:
         reserve.logging.info('Sending email...')
 
         if success:
-            reserve.logging.info('Success = True')
+            reserve.logging.info('Success = \'True\'')
             context = '成功，座位位于' + area_name_chs + '的' + room_name + '阅览室的' + seat + '座'
         else:
-            reserve.logging.info('Success = False')
+            reserve.logging.info('Success = \'False\'')
             context = '没约到，明儿再试试吧.' + error
 
-        message = MIMEText(context,'plain','utf-8')
+        message = MIMEText(context, 'plain', 'utf-8')
         message['Subject'] = '座位预定'
         message['From'] = sender
         message['To'] = receiver
 
         try:
-            smtpObj = smtplib.SMTP_SSL(mail_host,465)
+            smtpObj = smtplib.SMTP_SSL(mail_host, 465)
             smtpObj.login(mail_user, mail_pass)
             smtpObj.sendmail(sender, receiver, message.as_string())
             smtpObj.quit()
@@ -112,6 +113,7 @@ while configData:
             print('Email error', e)
             reserve.logging.error('Email error. ' + str(e))
 
+
     # main
     finalSeat, result, err = reserve.Reserve(user_id, password, wanted_seats, room_id)
     reserve.logging.info('Detecting more data')
@@ -119,22 +121,26 @@ while configData:
         reserve.logging.info('Detected. Detecting if maildata.')
         val = configData[0]
         val_list = val.split()
-        if len(val_list) == 2:
+        if len(val_list) == 2 and len(val_list[0]) == 1:
             reserve.logging.info('maildata detected.')
             if result is True:
-                send_email(seat = finalSeat, success = result)
+                send_email(seat=finalSeat, success=result)
                 reserve.logging.info('Detecting if moredata')
                 if configData:
                     reserve.logging.info('Detected. Deleting maildata')
                     configData.pop(0)
+                    reserve.logging.info('Returning...')
+                    reserve.logging.info('')
                 else:
                     reserve.logging.info('Exiting...')
             else:
-                send_email(success = result, error = err)
+                send_email(success=result, error=err)
                 reserve.logging.info('Detecting if moredata')
                 if configData:
                     reserve.logging.info('Detected. Deleting maildata')
                     configData.pop(0)
+                    reserve.logging.info('Returning...')
+                    reserve.logging.info('')
                 else:
                     reserve.logging.info('Exiting...')
         else:
