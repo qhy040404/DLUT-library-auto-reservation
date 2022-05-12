@@ -28,3 +28,11 @@ jobs:
           cp "config.conf" "dist/"
           cd dist
           ./main
+          cd ..
+          
+      - name: Upload log
+        continue-on-error: true
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: access.log
+          path: dist/access.log
