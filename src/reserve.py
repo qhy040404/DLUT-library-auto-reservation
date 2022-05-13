@@ -95,8 +95,8 @@ def Reserve(user_id, password, wanted_seats, room_id):
                 logging.info('Seat type data is ' + str(seat_type))
                 if seat_type == 1:
                     isASeat = True
-                    logging.info('Seat valid and setted')
-                    print('Seat setted.')
+                    logging.info('Seat valid and selected.')
+                    print('Seat selected.')
                     break
                 elif seat_type == 2 or seat_type == 3:
                     logging.error('Seat is not available. Type: ' + str(seat_type) + '. Seat: ' + str(seat_label_num))
@@ -116,9 +116,9 @@ def Reserve(user_id, password, wanted_seats, room_id):
                     seat_type = int(room_available_map[j + 4].strip('"seat_type":"'))
                     logging.info('Seat type data is ' + str(seat_type))
                     if seat_type == 1:
-                        logging.info('Seat valid and setted')
+                        logging.info('Seat valid and selected')
                         isASeat = True
-                        print('Seat setted.')
+                        print('Seat selected.')
                         break
                     elif seat_type == 2 or seat_type == 3:
                         logging.error(
