@@ -121,7 +121,7 @@ while configData:
         reserve.logging.info('Detected. Detecting if maildata.')
         val = configData[0]
         val_list = val.split()
-        if len(val_list) == 2 and len(val_list[0]) == 1:
+        if len(val_list) == 2 and len(val_list[0]) != 1:
             reserve.logging.info('maildata detected.')
             if result is True:
                 send_email(seat=finalSeat, success=result)
@@ -146,3 +146,5 @@ while configData:
         else:
             reserve.logging.info('Detected multi-person data. Returning...')
             reserve.logging.info('')
+    else:
+        reserve.logging.info('Exiting...')
