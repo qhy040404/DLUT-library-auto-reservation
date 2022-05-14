@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3.0.2
 
       - name: Compile
-        uses: qhy040404/BuildMySource@v2
+        uses: qhy040404/BuildMySource@v3.0.1
         with:
           language: python
           source: main
