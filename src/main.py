@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 import reserve
 
 # pre-define
-ver = '3.0.1.7'
+ver = '3.0.1.8'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
