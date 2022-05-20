@@ -258,7 +258,7 @@ jobs:
     - name: Upload Library-linux
       if: startsWith(matrix.os, 'ubuntu-')
       continue-on-error: true
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ matrix.os }}_Library-linux
         path: out/Library-linux.zip
@@ -266,7 +266,7 @@ jobs:
     - name: Upload Library-osx
       if: startsWith(matrix.os, 'macos-')
       continue-on-error: true
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ matrix.os }}_Library-osx
         path: Library-osx.zip
@@ -274,7 +274,7 @@ jobs:
     - name: Upload Library-win
       if: startsWith(matrix.os, 'windows-')
       continue-on-error: true
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ matrix.os }}_Library-win
         path: out/Library-win.zip
@@ -318,7 +318,7 @@ jobs:
 
     - name: Upload SHA512SUMS
       continue-on-error: true
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: SHA512SUMS
         path: upload/SHA512SUMS
