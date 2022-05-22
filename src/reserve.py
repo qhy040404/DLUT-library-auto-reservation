@@ -6,11 +6,18 @@ import logging
 
 import sso
 
+
 # Configure logging
-logging.basicConfig(level=logging.INFO,
-                    filename='./access.log',
-                    filemode='a',
-                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+def configureLogger(logLevel):
+    if logLevel == 'debug':
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+    logging.basicConfig(level=level,
+                        filename='./access.log',
+                        filemode='a',
+                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+
 
 # pre-define
 logging.info('Defining consts')
@@ -81,6 +88,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
         room_available_map = room_available_map.split('},{')
         room_available_map = (',').join(room_available_map)
         room_available_map = room_available_map.split(',')
+        logging.debug('map: ' + str(room_available_map))
 
         # check if available, get seat_id
         isASeat = False

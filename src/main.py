@@ -1,6 +1,7 @@
 # coding=utf-8
 
 # import
+import argparse
 import os
 import platform
 import smtplib
@@ -12,6 +13,15 @@ import reserve
 
 # pre-define
 ver = '3.0.1.8'
+
+# process arg
+parser = argparse.ArgumentParser()
+parser.add_argument('-l', '--level', default='info')
+args = parser.parse_args()
+logLevel = args.level
+
+# initialize logger
+reserve.configureLogger(logLevel)
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
