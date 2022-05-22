@@ -12,7 +12,7 @@ from email.mime.text import MIMEText
 import reserve
 
 # pre-define
-ver = '3.0.1.8'
+ver = '3.0.1.9-pre1'
 
 # process arg
 parser = argparse.ArgumentParser()
