@@ -6,17 +6,17 @@ import logging
 
 import sso
 
-
 # Configure logging
-def configureLogger(logLevel):
-    if logLevel == 'debug':
-        level = logging.DEBUG
-    else:
-        level = logging.INFO
-    logging.basicConfig(level=logging.INFO,
-                        filename='./access.log',
-                        filemode='a',
-                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+from src.main import logLevel
+
+if logLevel == 'debug':
+    level = logging.DEBUG
+else:
+    level = logging.INFO
+logging.basicConfig(level=level,
+                    filename='./access.log',
+                    filemode='a',
+                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 
 
 # pre-define
