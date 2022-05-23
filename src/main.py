@@ -9,8 +9,6 @@ import sys
 import time
 from email.mime.text import MIMEText
 
-import reserve
-
 # pre-define
 ver = '3.0.1.9-pre1'
 
@@ -23,7 +21,7 @@ logLevel = args.level
 print(logLevel)
 
 # initialize logger
-reserve.configureLogger(logLevel)
+import reserve
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
