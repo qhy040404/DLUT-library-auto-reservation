@@ -25,5 +25,5 @@ jobs:
 
       - name: Compile
         run: |
-            cd src
-            pyinstaller main.py
+          cd src
+          pyinstaller main.py

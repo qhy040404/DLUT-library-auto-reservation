@@ -1,25 +1,26 @@
-# coding=utf-8
+#  coding=utf-8
 
-# import
+import smtplib
+#  import
 import time
+import traceback
+from email.mime.text import MIMEText
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-import smtplib
-from email.mime.text import MIMEText
-import traceback
 
 # initialize
 area_map = {'伯川': '17', '令希': '32'}
-room_map = {'17': {'301': '168', '312': '170', '401': '195',\
-                   '404': '197', '409': '196', '501': '198',\
-                   '504': '199', '507': '200'},\
-            '32': {'301': '207', '302': '208', '401': '205',\
-                   '402': '206', '501': '203', '502': '204',\
+room_map = {'17': {'301': '168', '312': '170', '401': '195', \
+                   '404': '197', '409': '196', '501': '198', \
+                   '504': '199', '507': '200'}, \
+            '32': {'301': '207', '302': '208', '401': '205', \
+                   '402': '206', '501': '203', '502': '204', \
                    '601': '201', '602': '202'}
-           }
+            }
 
 # Read config
-with open("config.conf","r") as config:
+with open("config.conf", "r") as config:
     configData = config.readlines()
 
 while configData:
@@ -39,7 +40,8 @@ while configData:
     seatData = seatData.strip('\n')
     favorSeats = seatData.split("-")
 
-    def send_email(seat_id = None, successful = True):
+
+    def send_email(seat_id=None, successful=True):
         mailData = configData.pop(0)
         mailData = mailData.strip('\n')
         mailData = mailData.split()
@@ -59,13 +61,13 @@ while configData:
         else:
             context = '没约到，明儿再试试吧'
 
-        message = MIMEText(context,'plain','utf-8')
+        message = MIMEText(context, 'plain', 'utf-8')
         message['Subject'] = '座位预定'
         message['From'] = sender
         message['To'] = receiver
 
         try:
-            smtpObj = smtplib.SMTP_SSL(mail_host,465)
+            smtpObj = smtplib.SMTP_SSL(mail_host, 465)
             smtpObj.login(mail_user, mail_pass)
             smtpObj.sendmail(sender, receiver, message.as_string())
             smtpObj.quit()
@@ -73,8 +75,9 @@ while configData:
         except smtplib.SMTPException as e:
             print('error', e)
 
-    url = ['http://seat.lib.dlut.edu.cn/yanxiujian/client/orderSeat.php?method=addSeat&room_id=','&area_id=']
-    url.insert(1,room_id)
+
+    url = ['http://seat.lib.dlut.edu.cn/yanxiujian/client/orderSeat.php?method=addSeat&room_id=', '&area_id=']
+    url.insert(1, room_id)
     url.append(area_id)
     finalUrl = ('').join(url)
 
@@ -82,7 +85,8 @@ while configData:
     browser = webdriver.Chrome(service=s)
 
     # 登录
-    browser.get("https://sso.dlut.edu.cn/cas/login?service=http://seat.lib.dlut.edu.cn/yanxiujian/client/login.php?redirect=index.php")
+    browser.get(
+        "https://sso.dlut.edu.cn/cas/login?service=http://seat.lib.dlut.edu.cn/yanxiujian/client/login.php?redirect=index.php")
     input_userid = browser.find_element_by_id('un')
     input_userid.send_keys(user_id)
     input_password = browser.find_element_by_id('pd')
@@ -100,9 +104,10 @@ while configData:
 
     # 与原作者采用了不一样的方法，可以精确定位想要的位置
     flag = False
-    for i,item in enumerate(favorSeats):
+    for i, item in enumerate(favorSeats):
         target = favorSeats[i]
-        tab = browser.find_element_by_xpath("//table/tbody//tr//td/div[@class='seat-normal']/i[contains(text()," + target + ")]")
+        tab = browser.find_element_by_xpath(
+            "//table/tbody//tr//td/div[@class='seat-normal']/i[contains(text()," + target + ")]")
         tab.click()
         confirm_button = browser.find_element_by_id('btn_submit_addorder')
         try:
@@ -114,7 +119,7 @@ while configData:
                 val = configData[0]
                 val_list = val.split()
                 if len(val_list) == 2:
-                    send_email(seat_id, successful = True)
+                    send_email(seat_id, successful=True)
             break
         except Exception as e:
             traceback.extract_stack()
@@ -126,7 +131,7 @@ while configData:
             val = configData[0]
             val_list = val.split()
             if len(val_list) == 2:
-                send_email(successful = False)
+                send_email(successful=False)
 
     time.sleep(2)
 

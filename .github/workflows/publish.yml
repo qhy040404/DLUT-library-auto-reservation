@@ -1,6 +1,6 @@
 name: Publish
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 env:
   CONFIGURATION: Release
@@ -14,270 +14,270 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3.0.2
-      with:
-        submodules: recursive
+      - name: Checkout code
+        uses: actions/checkout@v3.0.2
+        with:
+          submodules: recursive
 
-    - name: Add MSBuild to PATH
-      if: startsWith(matrix.os, 'windows-')
-      uses: microsoft/setup-msbuild@v1.0.3
+      - name: Add MSBuild to PATH
+        if: startsWith(matrix.os, 'windows-')
+        uses: microsoft/setup-msbuild@v1.0.3
 
-    - name: Verify MSBuild
-      if: startsWith(matrix.os, 'windows-')
-      run: msbuild -version
+      - name: Verify MSBuild
+        if: startsWith(matrix.os, 'windows-')
+        run: msbuild -version
 
-    - name: Verify g++ on Linux
-      if: startsWith(matrix.os, 'ubuntu-')
-      shell: sh
-      run: g++ --version
+      - name: Verify g++ on Linux
+        if: startsWith(matrix.os, 'ubuntu-')
+        shell: sh
+        run: g++ --version
 
-    - name: Verify g++ on macOS
-      if: startsWith(matrix.os, 'macos-')
-      shell: sh
-      run: g++-9 --version
+      - name: Verify g++ on macOS
+        if: startsWith(matrix.os, 'macos-')
+        shell: sh
+        run: g++-9 --version
 
-    - name: Verify Python and pip packages (win&linux)
-      if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'ubuntu-')
-      run: |
-        python --version
-        pip install requests
-        pip install pyinstaller
-        pip install wget
+      - name: Verify Python and pip packages (win&linux)
+        if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'ubuntu-')
+        run: |
+          python --version
+          pip install requests
+          pip install pyinstaller
+          pip install wget
 
-    - name: Verify Python and pip packages (mac)
-      if: startsWith(matrix.os, 'macos-')
-      run: |
-        python3 --version
-        python3 -m pip install requests
-        python3 -m pip install pyinstaller
-        python3 -m pip install wget
+      - name: Verify Python and pip packages (mac)
+        if: startsWith(matrix.os, 'macos-')
+        run: |
+          python3 --version
+          python3 -m pip install requests
+          python3 -m pip install pyinstaller
+          python3 -m pip install wget
 
-    - name: Restore NuGet Packages
-      if: startsWith(matrix.os, 'windows-')
-      shell: pwsh
-      run: |
-        Set-StrictMode -Version Latest
+      - name: Restore NuGet Packages
+        if: startsWith(matrix.os, 'windows-')
+        shell: pwsh
+        run: |
+          Set-StrictMode -Version Latest
+          
+          cd ConfigGenerator
+          nuget restore
 
-        cd ConfigGenerator
-        nuget restore
+      - name: Publish ConfigGenerator on Linux
+        if: startsWith(matrix.os, 'ubuntu-')
+        shell: sh
+        run: |
+          cd ConfigGenerator
+          g++ -o ConfigGenerator Unix-version/src/source.cpp
+          mkdir out
+          cp "ConfigGenerator" "out/"
 
-    - name: Publish ConfigGenerator on Linux
-      if: startsWith(matrix.os, 'ubuntu-')
-      shell: sh
-      run: |
-        cd ConfigGenerator
-        g++ -o ConfigGenerator Unix-version/src/source.cpp
-        mkdir out
-        cp "ConfigGenerator" "out/"
+      - name: Publish ConfigGenerator on macOS
+        if: startsWith(matrix.os, 'macos-')
+        shell: sh
+        run: |
+          cd ConfigGenerator
+          g++-9 -o ConfigGenerator Unix-version/src/source.cpp
+          mkdir out
+          cp "ConfigGenerator" "out/"
 
-    - name: Publish ConfigGenerator on macOS
-      if: startsWith(matrix.os, 'macos-')
-      shell: sh
-      run: |
-        cd ConfigGenerator
-        g++-9 -o ConfigGenerator Unix-version/src/source.cpp
-        mkdir out
-        cp "ConfigGenerator" "out/"
+      - name: Publish ConfigGenerator on Windows
+        if: startsWith(matrix.os, 'windows-')
+        shell: pwsh
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+          
+          cd ConfigGenerator
+          msbuild -t:Build -p:Configuration=Release -p:OutDir="out\" -nologo
 
-    - name: Publish ConfigGenerator on Windows
-      if: startsWith(matrix.os, 'windows-')
-      shell: pwsh
-      run: |
-        Set-StrictMode -Version Latest
-        $ErrorActionPreference = 'Stop'
-        $ProgressPreference = 'SilentlyContinue'
+      - name: Publish Updater on Unix
+        if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
+        env:
+          VARIANTS: linux osx
+        shell: sh
+        run: |
+          pyinstaller -F Updater/src/Updater.py --distpath=out/
 
-        cd ConfigGenerator
-        msbuild -t:Build -p:Configuration=Release -p:OutDir="out\" -nologo
+      - name: Publish Updater on Windows
+        if: startsWith(matrix.os, 'windows-')
+        run: |
+          Set-StrictMode -Version Latest
+          New-Item -Name out -type "directory"
+          pyinstaller -i Updater/src/logo.ico -F --version-file Updater/src/version Updater/src/Updater.py --distpath=out/
 
-    - name: Publish Updater on Unix
-      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
-      env:
-        VARIANTS: linux osx
-      shell: sh
-      run: |
-        pyinstaller -F Updater/src/Updater.py --distpath=out/
+      - name: Publish main on Unix
+        if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
+        env:
+          VARIANTS: linux osx
+        shell: sh
+        run: |
+          pyinstaller -F src/main.py --distpath=out/
 
-    - name: Publish Updater on Windows
-      if: startsWith(matrix.os, 'windows-')
-      run: |
-        Set-StrictMode -Version Latest
-        New-Item -Name out -type "directory"
-        pyinstaller -i Updater/src/logo.ico -F --version-file Updater/src/version Updater/src/Updater.py --distpath=out/
+      - name: Publish main on Windows
+        if: startsWith(matrix.os, 'windows-')
+        run: |
+          Set-StrictMode -Version Latest
+          pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
 
-    - name: Publish main on Unix
-      if: startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-')
-      env:
-        VARIANTS: linux osx
-      shell: sh
-      run: |
-        pyinstaller -F src/main.py --distpath=out/
+      - name: Create zip file on Linux
+        if: startsWith(matrix.os, 'ubuntu-')
+        shell: sh
+        run: |
+          cp "Updater/src/config.json" "out/"
+          cp "Updater/src/update.sh" "out/"
+          cp "src/config.conf" "out/"
+          cp "ERRORCODE.html" "out/"
+          cp "ConfigGenerator/out/ConfigGenerator" "out/"
+          
+          # By default use fastest compression
+          seven_zip_args="-mx=1"
+          zip_args="-1"
+          
+          # Include extra logic for builds marked for release
+          case "$GITHUB_REF" in
+              "refs/tags/"*)
+                  # Tweak compression args for release publishing
+                  seven_zip_args="-mx=9 -mfb=258 -mpass=15"
+                  zip_args="-9"
+          esac
+          
+          case "$(uname -s)" in
+              "Darwin")
+                  # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
+                  if command -v zip >/dev/null; then
+                      (
+                          cd "${GITHUB_WORKSPACE}/out"
+                          zip -q -r $zip_args "../Library-linux.zip" .
+                      )
+                  elif command -v 7z >/dev/null; then
+                      7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
+                  else
+                      echo "ERROR: No supported zip tool!"
+                      return 1
+                  fi
+                  ;;
+              *)
+                  if command -v 7z >/dev/null; then
+                      7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
+                  elif command -v zip >/dev/null; then
+                      (
+                          cd "${GITHUB_WORKSPACE}/out"
+                          zip -q -r $zip_args "../Library-linux.zip" .
+                      )
+                  else
+                      echo "ERROR: No supported zip tool!"
+                      return 1
+                  fi
+                  ;;
+          esac
 
-    - name: Publish main on Windows
-      if: startsWith(matrix.os, 'windows-')
-      run: |
-        Set-StrictMode -Version Latest
-        pyinstaller -i src/logo.ico -F --version-file src/version src/main.py --distpath=out/
+      - name: Create zip file on macOS
+        if: startsWith(matrix.os, 'macos-')
+        shell: sh
+        run: |
+          cp "Updater/src/config.json" "out/"
+          cp "Updater/src/update.sh" "out/"
+          cp "ConfigGenerator/Unix-version/res/com.qhy040404.library.plist" "out/"
+          cp "src/config.conf" "out/"
+          cp "ERRORCODE.html" "out/"
+          cp "ConfigGenerator/out/ConfigGenerator" "out/"
+          
+          # By default use fastest compression
+          seven_zip_args="-mx=1"
+          zip_args="-1"
+          
+          # Include extra logic for builds marked for release
+          case "$GITHUB_REF" in
+              "refs/tags/"*)
+                  # Tweak compression args for release publishing
+                  seven_zip_args="-mx=9 -mfb=258 -mpass=15"
+                  zip_args="-9"
+          esac
+          
+          case "$(uname -s)" in
+              "Darwin")
+                  # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
+                  if command -v zip >/dev/null; then
+                      (
+                          cd "${GITHUB_WORKSPACE}/out"
+                          zip -q -r $zip_args "../Library-osx.zip" .
+                      )
+                  elif command -v 7z >/dev/null; then
+                      7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
+                  else
+                      echo "ERROR: No supported zip tool!"
+                      return 1
+                  fi
+                  ;;
+              *)
+                  if command -v 7z >/dev/null; then
+                      7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
+                  elif command -v zip >/dev/null; then
+                      (
+                          cd "${GITHUB_WORKSPACE}/out"
+                          zip -q -r $zip_args "../Library-osx.zip" .
+                      )
+                  else
+                      echo "ERROR: No supported zip tool!"
+                      return 1
+                  fi
+                  ;;
+          esac
 
-    - name: Create zip file on Linux
-      if: startsWith(matrix.os, 'ubuntu-')
-      shell: sh
-      run: |
-        cp "Updater/src/config.json" "out/"
-        cp "Updater/src/update.sh" "out/"
-        cp "src/config.conf" "out/"
-        cp "ERRORCODE.html" "out/"
-        cp "ConfigGenerator/out/ConfigGenerator" "out/"
-
-        # By default use fastest compression
-        seven_zip_args="-mx=1"
-        zip_args="-1"
-
-        # Include extra logic for builds marked for release
-        case "$GITHUB_REF" in
-            "refs/tags/"*)
-                # Tweak compression args for release publishing
-                seven_zip_args="-mx=9 -mfb=258 -mpass=15"
-                zip_args="-9"
-        esac
-
-        case "$(uname -s)" in
-            "Darwin")
-                # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
-                if command -v zip >/dev/null; then
-                    (
-                        cd "${GITHUB_WORKSPACE}/out"
-                        zip -q -r $zip_args "../Library-linux.zip" .
-                    )
-                elif command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
-                else
-                    echo "ERROR: No supported zip tool!"
-                    return 1
-                fi
-                ;;
-            *)
-                if command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-linux.zip" "${GITHUB_WORKSPACE}/out/*"
-                elif command -v zip >/dev/null; then
-                    (
-                        cd "${GITHUB_WORKSPACE}/out"
-                        zip -q -r $zip_args "../Library-linux.zip" .
-                    )
-                else
-                    echo "ERROR: No supported zip tool!"
-                    return 1
-                fi
-                ;;
-        esac
-
-    - name: Create zip file on macOS
-      if: startsWith(matrix.os, 'macos-')
-      shell: sh
-      run: |
-        cp "Updater/src/config.json" "out/"
-        cp "Updater/src/update.sh" "out/"
-        cp "ConfigGenerator/Unix-version/res/com.qhy040404.library.plist" "out/"
-        cp "src/config.conf" "out/"
-        cp "ERRORCODE.html" "out/"
-        cp "ConfigGenerator/out/ConfigGenerator" "out/"
-
-        # By default use fastest compression
-        seven_zip_args="-mx=1"
-        zip_args="-1"
-
-        # Include extra logic for builds marked for release
-        case "$GITHUB_REF" in
-            "refs/tags/"*)
-                # Tweak compression args for release publishing
-                seven_zip_args="-mx=9 -mfb=258 -mpass=15"
-                zip_args="-9"
-        esac
-
-        case "$(uname -s)" in
-            "Darwin")
-                # We prefer to use zip on OS X as 7z implementation on that OS doesn't handle file permissions (chmod +x)
-                if command -v zip >/dev/null; then
-                    (
-                        cd "${GITHUB_WORKSPACE}/out"
-                        zip -q -r $zip_args "../Library-osx.zip" .
-                    )
-                elif command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
-                else
-                    echo "ERROR: No supported zip tool!"
-                    return 1
-                fi
-                ;;
-            *)
-                if command -v 7z >/dev/null; then
-                    7z a -bd -slp -tzip -mm=Deflate $seven_zip_args "out/Library-osx.zip" "${GITHUB_WORKSPACE}/out/*"
-                elif command -v zip >/dev/null; then
-                    (
-                        cd "${GITHUB_WORKSPACE}/out"
-                        zip -q -r $zip_args "../Library-osx.zip" .
-                    )
-                else
-                    echo "ERROR: No supported zip tool!"
-                    return 1
-                fi
-                ;;
-        esac
-
-    - name: Create zip file on Windows
-      if: startsWith(matrix.os, 'windows-')
-      shell: pwsh
-      run: |
-        Copy-Item "Updater\src\config.json" "out"
-        Copy-Item "Updater\src\update.bat" "out"
-        Copy-Item "src\config.conf" "out"
-        Copy-Item "ERRORCODE.html" "out"
-        Copy-Item "ConfigGenerator\out\*" "out"
-        # By default use fastest compression
-        $compressionArgs = '-mx=1'
-
-        # Include extra logic for builds marked for release
-        if ($env:GITHUB_REF -like 'refs/tags/*') {
-            # Tweak compression args for release publishing
-            $compressionArgs = '-mx=9', '-mfb=258', '-mpass=15'
-        }
-
-        7z a -bd -slp -tzip -mm=Deflate $compressionArgs "out\Library-win.zip" "$env:GITHUB_WORKSPACE\out\*"
-
-        if ($LastExitCode -ne 0) {
-            throw "Last command failed."
-        }
+      - name: Create zip file on Windows
+        if: startsWith(matrix.os, 'windows-')
+        shell: pwsh
+        run: |
+          Copy-Item "Updater\src\config.json" "out"
+          Copy-Item "Updater\src\update.bat" "out"
+          Copy-Item "src\config.conf" "out"
+          Copy-Item "ERRORCODE.html" "out"
+          Copy-Item "ConfigGenerator\out\*" "out"
+          # By default use fastest compression
+          $compressionArgs = '-mx=1'
+          
+          # Include extra logic for builds marked for release
+          if ($env:GITHUB_REF -like 'refs/tags/*') {
+              # Tweak compression args for release publishing
+              $compressionArgs = '-mx=9', '-mfb=258', '-mpass=15'
+          }
+          
+          7z a -bd -slp -tzip -mm=Deflate $compressionArgs "out\Library-win.zip" "$env:GITHUB_WORKSPACE\out\*"
+          
+          if ($LastExitCode -ne 0) {
+              throw "Last command failed."
+          }
 
 
-    - name: Upload Library-linux
-      if: startsWith(matrix.os, 'ubuntu-')
-      continue-on-error: true
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: ${{ matrix.os }}_Library-linux
-        path: out/Library-linux.zip
+      - name: Upload Library-linux
+        if: startsWith(matrix.os, 'ubuntu-')
+        continue-on-error: true
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ matrix.os }}_Library-linux
+          path: out/Library-linux.zip
 
-    - name: Upload Library-osx
-      if: startsWith(matrix.os, 'macos-')
-      continue-on-error: true
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: ${{ matrix.os }}_Library-osx
-        path: Library-osx.zip
+      - name: Upload Library-osx
+        if: startsWith(matrix.os, 'macos-')
+        continue-on-error: true
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ matrix.os }}_Library-osx
+          path: Library-osx.zip
 
-    - name: Upload Library-win
-      if: startsWith(matrix.os, 'windows-')
-      continue-on-error: true
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: ${{ matrix.os }}_Library-win
-        path: out/Library-win.zip
+      - name: Upload Library-win
+        if: startsWith(matrix.os, 'windows-')
+        continue-on-error: true
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ matrix.os }}_Library-win
+          path: out/Library-win.zip
 
   release:
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
@@ -285,90 +285,90 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3.0.2
+      - name: Checkout code
+        uses: actions/checkout@v3.0.2
 
-    - name: Download Library-osx artifact from macos-latest
-      uses: actions/download-artifact@v3.0.0
-      with:
-        name: macos-latest_Library-osx
-        path: upload
+      - name: Download Library-osx artifact from macos-latest
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: macos-latest_Library-osx
+          path: upload
 
-    - name: Download Library-linux artifact from ubuntu-latest
-      uses: actions/download-artifact@v3.0.0
-      with:
-        name: ubuntu-latest_Library-linux
-        path: upload
+      - name: Download Library-linux artifact from ubuntu-latest
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: ubuntu-latest_Library-linux
+          path: upload
 
-    - name: Download Library-win artifact from windows-latest
-      uses: actions/download-artifact@v3.0.0
-      with:
-        name: windows-latest_Library-win
-        path: upload
+      - name: Download Library-win artifact from windows-latest
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: windows-latest_Library-win
+          path: upload
 
-    - name: Generate SHA-512 checksums
-      shell: sh
-      run: |
-        set -eu
-        (
-            cd "upload"
+      - name: Generate SHA-512 checksums
+        shell: sh
+        run: |
+          set -eu
+          (
+              cd "upload"
+          
+              sha512sum *.zip > SHA512SUMS
+          )
 
-            sha512sum *.zip > SHA512SUMS
-        )
+      - name: Upload SHA512SUMS
+        continue-on-error: true
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: SHA512SUMS
+          path: upload/SHA512SUMS
 
-    - name: Upload SHA512SUMS
-      continue-on-error: true
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: SHA512SUMS
-        path: upload/SHA512SUMS
+      - name: Create Library GitHub release
+        id: github_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: v${{ github.ref }}
+          prerelease: true
 
-    - name: Create Library GitHub release
-      id: github_release
-      uses: actions/create-release@v1.1.4
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: v${{ github.ref }}
-        prerelease: true
+      - name: Upload Library-linux to GitHub release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.github_release.outputs.upload_url }}
+          asset_path: upload/Library-linux.zip
+          asset_name: Library-linux.zip
+          asset_content_type: application/zip
 
-    - name: Upload Library-linux to GitHub release
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: upload/Library-linux.zip
-        asset_name: Library-linux.zip
-        asset_content_type: application/zip
+      - name: Upload Library-osx to GitHub release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.github_release.outputs.upload_url }}
+          asset_path: upload/Library-osx.zip
+          asset_name: Library-osx.zip
+          asset_content_type: application/zip
 
-    - name: Upload Library-osx to GitHub release
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: upload/Library-osx.zip
-        asset_name: Library-osx.zip
-        asset_content_type: application/zip
+      - name: Upload Library-win to GitHub release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.github_release.outputs.upload_url }}
+          asset_path: upload/Library-win.zip
+          asset_name: Library-win.zip
+          asset_content_type: application/zip
 
-    - name: Upload Library-win to GitHub release
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: upload/Library-win.zip
-        asset_name: Library-win.zip
-        asset_content_type: application/zip
-
-    - name: Upload SHA512SUMS to GitHub release
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.github_release.outputs.upload_url }}
-        asset_path: upload/SHA512SUMS
-        asset_name: SHA512SUMS
-        asset_content_type: text/plain
+      - name: Upload SHA512SUMS to GitHub release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.github_release.outputs.upload_url }}
+          asset_path: upload/SHA512SUMS
+          asset_name: SHA512SUMS
+          asset_content_type: text/plain
