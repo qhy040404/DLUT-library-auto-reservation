@@ -7,7 +7,7 @@ import logging
 import sso
 
 # Configure logging
-from src.main import logLevel
+from main import logLevel
 
 if logLevel == 'debug':
     level = logging.DEBUG
