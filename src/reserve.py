@@ -10,13 +10,15 @@ import sso
 from main import logLevel
 
 if logLevel == 'debug':
-    level = logging.DEBUG
+    logging.basicConfig(level=logging.DEBUG,
+                        filename='./access.log',
+                        filemode='a',
+                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 else:
-    level = logging.INFO
-logging.basicConfig(level=level,
-                    filename='./access.log',
-                    filemode='a',
-                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.INFO,
+                        filename='./access.log',
+                        filemode='a',
+                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 
 
 # pre-define
