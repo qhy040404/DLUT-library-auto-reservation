@@ -20,6 +20,8 @@ parser.add_argument('-l', '--level', default='info')
 args = parser.parse_args()
 logLevel = args.level
 
+print(logLevel)
+
 # initialize logger
 reserve.configureLogger(logLevel)
 
