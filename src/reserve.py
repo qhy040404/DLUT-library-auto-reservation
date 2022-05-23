@@ -7,19 +7,10 @@ import logging
 import sso
 
 # Configure logging
-from main import logLevel
-
-if logLevel == 'debug':
-    logging.basicConfig(level=logging.DEBUG,
-                        filename='./access.log',
-                        filemode='a',
-                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-else:
-    logging.basicConfig(level=logging.INFO,
-                        filename='./access.log',
-                        filemode='a',
-                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-
+logging.basicConfig(level=logging.INFO,
+                    filename='./access.log',
+                    filemode='a',
+                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 
 # pre-define
 logging.info('Defining consts')
