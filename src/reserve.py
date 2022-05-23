@@ -13,7 +13,7 @@ def configureLogger(logLevel):
         level = logging.DEBUG
     else:
         level = logging.INFO
-    logging.basicConfig(level=level,
+    logging.basicConfig(level=logging.INFO,
                         filename='./access.log',
                         filemode='a',
                         format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
