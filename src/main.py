@@ -1,7 +1,6 @@
 # coding=utf-8
 
 # import
-import argparse
 import os
 import platform
 import smtplib
@@ -12,13 +11,7 @@ from email.mime.text import MIMEText
 import reserve
 
 # pre-define
-ver = '3.0.1.9-pre1'
-
-# process arg
-parser = argparse.ArgumentParser()
-parser.add_argument('-l', '--level', default='info')
-args = parser.parse_args()
-logLevel = args.level
+ver = '3.0.1.9-pre2'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
