@@ -1,9 +1,10 @@
 # 大连理工大学图书馆自动预约座位小程序
 
 [![Build status (GitHub)](https://img.shields.io/github/workflow/status/qhy040404/DLUT-library-auto-reservation/Compile-and-Test-CI/master?label=Compile&logo=github&cacheSeconds=600)](https://github.com/qhy040404/DLUT-library-auto-reservation/actions)
-&nbsp;[![CodeFactor](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation/badge)](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation)
-&nbsp;[![Github last commit date](https://img.shields.io/github/last-commit/qhy040404/DLUT-library-auto-reservation.svg?label=Updated&logo=github&cacheSeconds=600)](https://github.com/qhy040404/DLUT-library-auto-reservation/commits)
-&nbsp;[![License](https://img.shields.io/github/license/qhy040404/DLUT-library-auto-reservation.svg?label=License&logo=github&cacheSeconds=2592000)](https://github.com/qhy040404/DLUT-library-auto-reservation/blob/master/LICENSE)
+[![CodeFactor](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation/badge)](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation)
+[![Github last commit date](https://img.shields.io/github/last-commit/qhy040404/DLUT-library-auto-reservation.svg?label=Updated&logo=github&cacheSeconds=600)](https://github.com/qhy040404/DLUT-library-auto-reservation/commits)
+[![License](https://img.shields.io/github/license/qhy040404/DLUT-library-auto-reservation.svg?label=License&logo=github&cacheSeconds=2592000)](https://github.com/qhy040404/DLUT-library-auto-reservation/blob/master/LICENSE)
+
 ![GitHub top language](https://img.shields.io/github/languages/top/qhy040404/DLUT-library-auto-reservation)
 
 # 2nd Generation
