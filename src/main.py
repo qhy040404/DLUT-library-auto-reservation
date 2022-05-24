@@ -71,7 +71,6 @@ while configData:
     seatData = seatData.strip('\n')
     wanted_seats = seatData.split('-')
 
-
     # function email
     def send_email(seat=None, success=False, error=None):
         reserve.logging.info('Processing mail data.')
