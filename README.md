@@ -21,10 +21,8 @@
 ## 依赖项
 
 - [Python](https://www.python.org/downloads/)
-- requests （推荐使用[pip](https://pip.pypa.io/en/stable/installation/)）
-    - ```pip install -U requests``` (For Linux)
-    - ```py -m pip install -U requests``` (For Windows)
-- 不下依赖包用个der啊
+- `pip install -r requirements.txt`
+  - requests
 
 ## 使用
 
