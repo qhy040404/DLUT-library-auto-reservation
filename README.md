@@ -5,7 +5,7 @@
 [![Build status (GitHub)](https://img.shields.io/github/workflow/status/qhy040404/DLUT-library-auto-reservation/Compile-and-Test-CI/master?label=Compile&logo=github&cacheSeconds=600)](https://github.com/qhy040404/DLUT-library-auto-reservation/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation/badge)](https://www.codefactor.io/repository/github/qhy040404/dlut-library-auto-reservation)
 [![Github last commit date](https://img.shields.io/github/last-commit/qhy040404/DLUT-library-auto-reservation.svg?label=Updated&logo=github&cacheSeconds=600)](https://github.com/qhy040404/DLUT-library-auto-reservation/commits)
-[![License](https://img.shields.io/github/license/qhy040404/DLUT-library-auto-reservation.svg?label=License&logo=github&cacheSeconds=2592000)](https://github.com/qhy040404/DLUT-library-auto-reservation/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/qhy040404/DLUT-library-auto-reservation.svg?label=License&logo=github&cacheSeconds=2592000)](LICENSE)
 
 ![GitHub top language](https://img.shields.io/github/languages/top/qhy040404/DLUT-library-auto-reservation)
 
@@ -18,7 +18,7 @@
 ## 特性
 
 - 命令行界面回归，可以查看log
-- 可通过邮件推送预约结果，以及预约失败原因（[错误码](ERRORCODE)）
+- 可通过邮件推送预约结果，以及预约失败原因（[错误码](ERRORCODE.md)）
 
 ## 依赖项
 
