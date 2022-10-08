@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 import reserve
 
 # pre-define
-ver = '3.0.1.9-pre2'
+ver = '3.0.2.1'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
@@ -53,9 +53,7 @@ with open("config.conf", "r") as config:
 while configData:
     reserve.logging.info('Splitting data')
     configData.pop(0)
-    data = configData.pop(0)
-    data = data.strip('\n')
-    data = data.split()
+    data = configData.pop(0).strip('\n').split()
 
     reserve.logging.info('Processing basic data.')
     user_id = data[0]
@@ -74,14 +72,12 @@ while configData:
     # function email
     def send_email(seat=None, success=False, error=None):
         reserve.logging.info('Processing mail data.')
-        mailData = configData.pop(0)
-        mailData = mailData.strip('\n')
-        mailData = mailData.split()
+        mail_data = configData.pop(0).strip('\n').split()
 
-        mail_user = mailData[0]
-        mail_pass = mailData[1]
-        sender = mailData[0]
-        receiver = mailData[0]
+        mail_user = mail_data[0]
+        mail_pass = mail_data[1]
+        sender = mail_data[0]
+        receiver = mail_data[0]
         mail_temp_data = mail_user.split('@')
         mail_host_pre = 'smtp.'
         mail_host = mail_host_pre + mail_temp_data[1]
@@ -102,10 +98,10 @@ while configData:
         message['To'] = receiver
 
         try:
-            smtpObj = smtplib.SMTP_SSL(mail_host, 465)
-            smtpObj.login(mail_user, mail_pass)
-            smtpObj.sendmail(sender, receiver, message.as_string())
-            smtpObj.quit()
+            smtp_obj = smtplib.SMTP_SSL(mail_host, 465)
+            smtp_obj.login(mail_user, mail_pass)
+            smtp_obj.sendmail(sender, receiver, message.as_string())
+            smtp_obj.quit()
             print('Email succeed')
             reserve.logging.info('Email succeed')
         except smtplib.SMTPException as e:

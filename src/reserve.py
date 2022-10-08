@@ -76,15 +76,16 @@ def Reserve(user_id, password, wanted_seats, room_id):
     while True:
         # get seats status
         logging.info('Getting seats status')
-        room_available_map = s.get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id).text
-        room_available_map = room_available_map.strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')
-        room_available_map = room_available_map.split('},{')
-        room_available_map = (',').join(room_available_map)
-        room_available_map = room_available_map.split(',')
+        room_available_map = s\
+            .get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id)\
+            .text\
+            .strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')\
+            .split('},{')
+        room_available_map = ','.join(room_available_map).split(',')
         logging.debug('map: ' + str(room_available_map))
 
         # check if available, get seat_id
-        isASeat = False
+        isSeat = False
         if type(wanted_seats) == str:
             logging.info('Data only includes 1 seat, mode 1')
             seat_label_num = wanted_seats
@@ -95,7 +96,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                 seat_type = int(room_available_map[j + 4].strip('"seat_type":"'))
                 logging.info('Seat type data is ' + str(seat_type))
                 if seat_type == 1:
-                    isASeat = True
+                    isSeat = True
                     logging.info('Seat valid and selected.')
                     print('Seat selected.')
                     break
@@ -118,7 +119,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
                     logging.info('Seat type data is ' + str(seat_type))
                     if seat_type == 1:
                         logging.info('Seat valid and selected')
-                        isASeat = True
+                        isSeat = True
                         print('Seat selected.')
                         break
                     elif seat_type == 2 or seat_type == 3:
@@ -130,10 +131,10 @@ def Reserve(user_id, password, wanted_seats, room_id):
                         logging.warning('Seat invalid. Removing invalid data and switch to a valid seat.')
                         print('Not a seat. Switching...')
                         room_available_map.remove(seat_label)
-                if isASeat is True:
+                if isSeat is True:
                     break
 
-        if isASeat is not True:
+        if isSeat is not True:
             logging.error('Seat unavailable or invalid. Check logs above.')
             print('Failed. Seat unavailable.')
             return None, nice, 'Type Error.'
@@ -162,11 +163,11 @@ def Reserve(user_id, password, wanted_seats, room_id):
         # get addCode
         logging.info('Processing addCode')
         addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date),
-                         headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
-        addCode = addCode.split(',')
-        addCode = addCode.pop()
-        addCode = addCode.lstrip('"addCode":"')
-        addCode = addCode.rstrip('"}}\r\n\r\n\r\n\r\n')
+                         headers={'Content-Type': 'application/x-www-form-urlencoded'}).text\
+            .split(',')\
+            .pop()\
+            .lstrip('"addCode":"')\
+            .rstrip('"}}\r\n\r\n\r\n\r\n')
         logging.info('addCode is ' + addCode)
 
         # submit reserve post
