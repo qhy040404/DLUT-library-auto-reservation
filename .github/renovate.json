@@ -3,7 +3,6 @@
     "config:base",
     ":assignee(qhy040404)",
     ":disableRateLimiting",
-    ":disableDependencyDashboard",
     ":label(automatic)"
   ],
   "git-submodules": {
