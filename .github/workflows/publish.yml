@@ -26,7 +26,7 @@ jobs:
 
       - name: Add MSBuild to PATH
         if: startsWith(matrix.os, 'windows-')
-        uses: microsoft/setup-msbuild@v1.0.3
+        uses: microsoft/setup-msbuild@v1.1.3
 
       - name: Verify MSBuild
         if: startsWith(matrix.os, 'windows-')
