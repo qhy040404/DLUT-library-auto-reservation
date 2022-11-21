@@ -102,7 +102,7 @@ jobs:
           VARIANTS: linux osx
         shell: sh
         run: |
-          pyinstaller -F Updater/src/Updater.py --distpath=out/
+          python3 -m pyinstaller -F Updater/src/Updater.py --distpath=out/
 
       - name: Publish Updater on Windows
         if: startsWith(matrix.os, 'windows-')
@@ -117,7 +117,7 @@ jobs:
           VARIANTS: linux osx
         shell: sh
         run: |
-          pyinstaller -F src/main.py --distpath=out/
+          python3 -m pyinstaller -F src/main.py --distpath=out/
 
       - name: Publish main on Windows
         if: startsWith(matrix.os, 'windows-')
