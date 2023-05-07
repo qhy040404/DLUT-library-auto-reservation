@@ -3,6 +3,7 @@
 # import
 import datetime
 import logging
+import sys
 
 import sso
 
@@ -72,6 +73,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
             if logCount >= 3:
                 print('Failed 3 times. Check your username and password. Exiting.')
                 logging.critical('Failed 3 times. Check your username and password. Exiting.')
+                sys.exit()
 
     while True:
         # get seats status

@@ -9,9 +9,10 @@ import time
 from email.mime.text import MIMEText
 
 import reserve
+from src.utils import has_more
 
 # pre-define
-ver = '3.0.2.1'
+ver = '3.1.0.0'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
@@ -50,37 +51,29 @@ with open("config.conf", "r") as config:
         sys.exit()
     configData.pop(0)
 
-while configData:
+while has_more(configData):
     reserve.logging.info('Splitting data')
     configData.pop(0)
     data = configData.pop(0).strip('\n').split()
 
     reserve.logging.info('Processing basic data.')
-    user_id = data[0]
-    password = data[1]
-    area_name = data[2]
-    room_name = data[3]
+    user_id, password, area_name, room_name = data[0], data[1], data[2], data[3]
     area_id = area_map.get(area_name)
     room_id = room_map.get(area_id).get(room_name)
     area_name_chs = area_map_chs.get(area_name)
 
     reserve.logging.info('Processing seat data.')
-    seatData = configData.pop(0)
-    seatData = seatData.strip('\n')
+    seatData = configData.pop(0).strip('\n')
     wanted_seats = seatData.split('-')
+
 
     # function email
     def send_email(seat=None, success=False, error=None):
-        reserve.logging.info('Processing mail data.')
+        reserve.logging.info('Processing and deleting mail data.')
         mail_data = configData.pop(0).strip('\n').split()
 
-        mail_user = mail_data[0]
-        mail_pass = mail_data[1]
-        sender = mail_data[0]
-        receiver = mail_data[0]
-        mail_temp_data = mail_user.split('@')
-        mail_host_pre = 'smtp.'
-        mail_host = mail_host_pre + mail_temp_data[1]
+        mail_user, mail_pass = mail_data[0], mail_data[1]
+        mail_host = f"smtp.{mail_user.split('@')[1]}"
 
         print('Sending email...')
         reserve.logging.info('Sending email...')
@@ -94,13 +87,13 @@ while configData:
 
         message = MIMEText(context, 'plain', 'utf-8')
         message['Subject'] = '座位预定'
-        message['From'] = sender
-        message['To'] = receiver
+        message['From'] = mail_user
+        message['To'] = mail_user
 
         try:
             smtp_obj = smtplib.SMTP_SSL(mail_host, 465)
             smtp_obj.login(mail_user, mail_pass)
-            smtp_obj.sendmail(sender, receiver, message.as_string())
+            smtp_obj.sendmail(mail_user, mail_user, message.as_string())
             smtp_obj.quit()
             print('Email succeed')
             reserve.logging.info('Email succeed')
@@ -112,34 +105,20 @@ while configData:
     # main
     finalSeat, result, err = reserve.Reserve(user_id, password, wanted_seats, room_id)
     reserve.logging.info('Detecting more data')
-    if configData:
+    if has_more(configData):
         reserve.logging.info('Detected. Detecting if maildata.')
-        val = configData[0]
-        val_list = val.split()
-        if len(val_list) == 2 and len(val_list[0]) != 1:
-            reserve.logging.info('maildata detected.')
-            if result is True:
-                send_email(seat=finalSeat, success=result)
-                reserve.logging.info('Detecting if moredata')
-                if configData:
-                    reserve.logging.info('Detected. Deleting maildata')
-                    configData.pop(0)
-                    reserve.logging.info('Returning...')
-                    reserve.logging.info('')
-                else:
-                    reserve.logging.info('Exiting...')
-            else:
-                send_email(success=result, error=err)
-                reserve.logging.info('Detecting if moredata')
-                if configData:
-                    reserve.logging.info('Detected. Deleting maildata')
-                    configData.pop(0)
-                    reserve.logging.info('Returning...')
-                    reserve.logging.info('')
-                else:
-                    reserve.logging.info('Exiting...')
-        else:
+        more_data = configData[0].strip('\n').split()
+        if more_data[0].startswith('#'):
             reserve.logging.info('Detected multi-person data. Returning...')
             reserve.logging.info('')
+        else:
+            reserve.logging.info('maildata detected. ')
+            send_email(seat=finalSeat, success=result, error=err)
+            reserve.logging.info('Detecting if moredata')
+            if has_more(configData):
+                reserve.logging.info('Detected. Returning...')
+                reserve.logging.info('')
+            else:
+                reserve.logging.info('Exiting...')
     else:
         reserve.logging.info('Exiting...')
