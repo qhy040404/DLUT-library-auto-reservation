@@ -9,10 +9,10 @@ import time
 from email.mime.text import MIMEText
 
 import reserve
-from src.utils import has_more
+from utils import has_more
 
 # pre-define
-ver = '3.1.0.0'
+ver = '3.1.0.1'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
