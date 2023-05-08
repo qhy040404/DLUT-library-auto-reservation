@@ -12,7 +12,7 @@ import reserve
 from utils import has_more
 
 # pre-define
-ver = '3.1.0.1'
+ver = '3.1.0.2'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
@@ -52,8 +52,8 @@ with open("config.conf", "r") as config:
     configData.pop(0)
 
 while has_more(configData):
+    reserve.logging.info(configData.pop(0).strip('\n'))
     reserve.logging.info('Splitting data')
-    configData.pop(0)
     data = configData.pop(0).strip('\n').split()
 
     reserve.logging.info('Processing basic data.')
