@@ -3,12 +3,12 @@
 # import
 import os
 import platform
-import smtplib
 import sys
 import time
 from email.mime.text import MIMEText
 
 import reserve
+from mail import Mail, mails, send_all
 from utils import has_more
 
 # pre-define
@@ -35,6 +35,12 @@ room_map = {'17': {'301': '168', '312': '170', '401': '195',
                    '601': '201', '602': '202', '201': '180',
                    '202': '181'}
             }
+
+
+def send_and_exit():
+    send_all()
+    reserve.logging.info('Exiting...')
+
 
 # Read config
 reserve.logging.info('Importing data from config.conf')
@@ -75,8 +81,8 @@ while has_more(configData):
         mail_user, mail_pass = mail_data[0], mail_data[1]
         mail_host = f"smtp.{mail_user.split('@')[1]}"
 
-        print('Sending email...')
-        reserve.logging.info('Sending email...')
+        print('Generating email...')
+        reserve.logging.info('Generating email...')
 
         if success:
             reserve.logging.info('Success = \'True\'')
@@ -90,16 +96,7 @@ while has_more(configData):
         message['From'] = mail_user
         message['To'] = mail_user
 
-        try:
-            smtp_obj = smtplib.SMTP_SSL(mail_host, 465)
-            smtp_obj.login(mail_user, mail_pass)
-            smtp_obj.sendmail(mail_user, mail_user, message.as_string())
-            smtp_obj.quit()
-            print('Email succeed')
-            reserve.logging.info('Email succeed')
-        except smtplib.SMTPException as e:
-            print('Email error', e)
-            reserve.logging.error('Email error. ' + str(e))
+        mails.append(Mail(mail_host, mail_user, mail_pass, message.as_string()))
 
 
     # main
@@ -119,6 +116,6 @@ while has_more(configData):
                 reserve.logging.info('Detected. Returning...')
                 reserve.logging.info('')
             else:
-                reserve.logging.info('Exiting...')
+                send_and_exit()
     else:
-        reserve.logging.info('Exiting...')
+        send_and_exit()
