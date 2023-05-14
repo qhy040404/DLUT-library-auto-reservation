@@ -11,18 +11,18 @@ class Mail:
         self.message = message
 
     def send(self, count):
-        print(f'Sending email#${count}...')
-        reserve.logging.info(f'Sending email#${count}...')
+        print(f'Sending email#{count}...')
+        reserve.logging.info(f'Sending email#{count}...')
         try:
             smtp_obj = smtplib.SMTP_SSL(self.host, 465)
             smtp_obj.login(self.user, self.passwd)
             smtp_obj.sendmail(self.user, self.user, self.message)
             smtp_obj.quit()
-            print(f'Email #${count} succeed')
-            reserve.logging.info(f'Email #${count} succeed')
+            print(f'Email #{count} succeed')
+            reserve.logging.info(f'Email #{count} succeed')
         except smtplib.SMTPException as e:
-            print(f'Email #${count} error', e)
-            reserve.logging.error(f'Email #${count} error. ' + str(e))
+            print(f'Email #{count} error', e)
+            reserve.logging.error(f'Email #{count} error. ' + str(e))
 
 
 mails: list[Mail] = []

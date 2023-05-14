@@ -2,8 +2,11 @@
 
 # import
 import datetime
+import json
 import logging
 import sys
+
+import requests
 
 import sso
 
@@ -47,6 +50,12 @@ def constructParaForAddSeat(addCode):
     return '&'.join([i + '=' + j for i, j in al.items()])
 
 
+def logout(s: requests.Session):
+    logging.info('Logging out...')
+    s.get(logout_url)
+    del s
+
+
 def Reserve(user_id, password, wanted_seats, room_id):
     logging.info('Arrived at reserve.py')
 
@@ -61,15 +70,16 @@ def Reserve(user_id, password, wanted_seats, room_id):
         logging.info('Logging in')
         s = sso.login(id=user_id, passwd=password)
         logging.info('Check session')
-        ifLogin = s.get(session_stat).text
-        if 'user_id' in ifLogin:
+        session = json.loads(s.get(session_stat).text.encode('utf8')[3:].decode('utf8'))
+        if session['success'] is True:
             online = True
-            logging.info('Session is \'' + str(online) + '\'')
+            logging.info(f"Session is '{session['success']}'")
+            logging.info(f"Current user is {session['user_id']}")
         else:
             logCount = logCount + 1
             print('Login error.', logCount)
             logging.error('Login error. ' + str(logCount))
-            del s
+            logout(s)
             if logCount >= 3:
                 print('Failed 3 times. Check your username and password. Exiting.')
                 logging.critical('Failed 3 times. Check your username and password. Exiting.')
@@ -78,10 +88,10 @@ def Reserve(user_id, password, wanted_seats, room_id):
     while True:
         # get seats status
         logging.info('Getting seats status')
-        room_available_map = s\
-            .get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id)\
-            .text\
-            .strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n')\
+        room_available_map = s \
+            .get(room_available_map_url[0] + order_date + room_available_map_url[1] + room_id) \
+            .text \
+            .strip('\ufeff\r\n\r\n[[{}]]\r\n\r\n\r\n\r\n') \
             .split('},{')
         room_available_map = ','.join(room_available_map).split(',')
         logging.debug('map: ' + str(room_available_map))
@@ -139,6 +149,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
         if isSeat is not True:
             logging.error('Seat unavailable or invalid. Check logs above.')
             print('Failed. Seat unavailable.')
+            logout(s)
             return None, nice, 'Type Error.'
 
         status = int(room_available_map[j + 5].lstrip('"seat_order_status":'))
@@ -148,6 +159,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
         else:
             logging.error('Failed. Status is ' + str(status))
             print('Seat Unavailable.(status)')
+            logout(s)
             return None, nice, 'Status Error.'
         seat_id = room_available_map[j - 1].strip('"seat_id":""')
 
@@ -159,16 +171,16 @@ def Reserve(user_id, password, wanted_seats, room_id):
         else:
             logging.warning('Failed. Re-logging in')
             print('Logged out. Sending login request.')
-            del s
+            logout(s)
             s = sso.login(id=user_id, passwd=password)
 
         # get addCode
         logging.info('Processing addCode')
         addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date),
-                         headers={'Content-Type': 'application/x-www-form-urlencoded'}).text\
-            .split(',')\
-            .pop()\
-            .lstrip('"addCode":"')\
+                         headers={'Content-Type': 'application/x-www-form-urlencoded'}).text \
+            .split(',') \
+            .pop() \
+            .lstrip('"addCode":"') \
             .rstrip('"}}\r\n\r\n\r\n\r\n')
         logging.info('addCode is ' + addCode)
 
@@ -187,10 +199,13 @@ def Reserve(user_id, password, wanted_seats, room_id):
             error = reserve_response
             logging.error('Failed. Error data is')
             logging.error(error)
-            logging.info('Detecting if wanted_seats is a list...')
-            logging.info('Retrying...')
+            if '已经存在预约记录' in error:
+                logging.info('Already has a seat, returning...')
+                break
+            else:
+                logging.info('Detecting if wanted_seats is a list...')
+                logging.info('Retrying...')
 
     # logout
-    logging.info('Logging out...')
-    s.get(logout_url)
+    logout(s)
     return seat_label_num, nice, error
