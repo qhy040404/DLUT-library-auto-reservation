@@ -12,7 +12,7 @@ from mail import Mail, mails, send_all
 from utils import has_more
 
 # pre-define
-ver = '3.1.1.0'
+ver = '3.1.2.0'
 
 # initialize
 reserve.logging.info('Welcome to DLUT-library-auto-reservation ' + ver)
