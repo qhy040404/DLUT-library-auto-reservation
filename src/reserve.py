@@ -5,6 +5,7 @@ import datetime
 import json
 import logging
 import sys
+import time
 
 import requests
 
@@ -15,6 +16,16 @@ logging.basicConfig(level=logging.INFO,
                     filename='./access.log',
                     filemode='a',
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+
+
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logging.critical("Exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+
+sys.excepthook = handle_exception
 
 # pre-define
 logging.info('Defining consts')
@@ -176,6 +187,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
 
         # get addCode
         logging.info('Processing addCode')
+        time.sleep(0.05)
         addCode = s.post(get_addCode_url, constructParaForAddCode(seat_id, order_date),
                          headers={'Content-Type': 'application/x-www-form-urlencoded'}).text \
             .split(',') \
@@ -186,6 +198,7 @@ def Reserve(user_id, password, wanted_seats, room_id):
 
         # submit reserve post
         logging.info('Reserving')
+        time.sleep(0.05)
         reserve_response = s.post(addSeat_url, constructParaForAddSeat(addCode),
                                   headers={'Content-Type': 'application/x-www-form-urlencoded'}).text
         if '预约成功' in reserve_response:
