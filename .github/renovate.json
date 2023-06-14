@@ -1,7 +1,6 @@
 {
   "extends": [
     "config:base",
-    ":assignee(qhy040404)",
     ":disableRateLimiting",
     ":label(automatic)"
   ],
